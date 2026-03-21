@@ -1,0 +1,73 @@
+{
+  "name": "black-tonny-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "keywords": [
+    "black-tonny",
+    "retail-dashboard",
+    "vben",
+    "vue",
+    "element-plus",
+    "vue3"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "lizhihui"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "pnpm -F @vben/web-ele run build",
+    "clean": "node ./scripts/clean.mjs",
+    "dev": "pnpm -F @vben/web-ele run dev",
+    "postinstall": "pnpm -r run stub --if-present",
+    "preinstall": "npx only-allow pnpm",
+    "prepare": "pnpm exec lefthook install",
+    "sync:data": "node ./scripts/sync-black-tonny-data.mjs",
+    "test:unit": "vitest run --dom",
+    "typecheck": "pnpm -F @vben/web-ele run typecheck"
+  },
+  "devDependencies": {
+    "@changesets/changelog-github": "catalog:",
+    "@changesets/cli": "catalog:",
+    "@playwright/test": "catalog:",
+    "@tsdown/css": "catalog:",
+    "@types/node": "catalog:",
+    "@vben/commitlint-config": "workspace:*",
+    "@vben/eslint-config": "workspace:*",
+    "@vben/oxfmt-config": "workspace:*",
+    "@vben/oxlint-config": "workspace:*",
+    "@vben/stylelint-config": "workspace:*",
+    "@vben/tailwind-config": "workspace:*",
+    "@vben/tsconfig": "workspace:*",
+    "@vben/turbo-run": "workspace:*",
+    "@vben/vite-config": "workspace:*",
+    "@vben/vsh": "workspace:*",
+    "@vitejs/plugin-vue": "catalog:",
+    "@vitejs/plugin-vue-jsx": "catalog:",
+    "@vue/test-utils": "catalog:",
+    "cross-env": "catalog:",
+    "cspell": "catalog:",
+    "happy-dom": "catalog:",
+    "is-ci": "catalog:",
+    "lefthook": "catalog:",
+    "oxfmt": "catalog:",
+    "oxlint": "catalog:",
+    "oxlint-tsgolint": "catalog:",
+    "playwright": "catalog:",
+    "rimraf": "catalog:",
+    "tailwindcss": "catalog:",
+    "tsdown": "catalog:",
+    "turbo": "catalog:",
+    "typescript": "catalog:",
+    "unplugin-vue": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:",
+    "vue": "catalog:",
+    "vue-tsc": "catalog:"
+  },
+  "engines": {
+    "node": "^20.19.0 || ^22.18.0 || ^24.0.0",
+    "pnpm": ">=10.0.0"
+  },
+  "packageManager": "pnpm@10.32.1"
+}

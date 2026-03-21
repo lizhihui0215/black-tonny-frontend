@@ -1,0 +1,4 @@
+interface:
+  display_name: "Black Tonny Frontend Standards"
+  short_description: "Shared Black Tonny frontend rules"
+  default_prompt: "Use $black-tonny-frontend-standards to work inside black-tonny-frontend and follow the repo's vben-based frontend rules first."
