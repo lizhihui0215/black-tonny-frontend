@@ -326,7 +326,11 @@ onUnmounted(() => {
         v-if="!collapse && !isSidebarMixed && showFixedButton"
         v-model:expand-on-hover="expandOnHover"
       />
-      <div v-if="slots.logo" :style="headerStyle" class="vben-layout-sidebar__logo">
+      <div
+        v-if="slots.logo"
+        :style="headerStyle"
+        class="vben-layout-sidebar__logo"
+      >
         <slot name="logo"></slot>
       </div>
       <VbenScrollbar :style="contentStyle" shadow shadow-border>

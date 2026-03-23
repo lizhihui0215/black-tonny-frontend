@@ -306,7 +306,10 @@ watchEffect(() => {
     ],
     riskPoints,
     sourceNote,
-    staffTips: Array.from(new Set([...staffActions, ...todayTasks])).slice(0, 4),
+    staffTips: Array.from(new Set([...staffActions, ...todayTasks])).slice(
+      0,
+      4,
+    ),
     summary: summaryError.value
       ? '顶部 summary 暂未拿到完整接口结果，先结合页面 payload 判断。'
       : `当前区间为 ${summaryFilterState.value.startDate} 到 ${summaryFilterState.value.endDate}，先看顶部 8 张卡，再下钻到正式 payload 区块。`,

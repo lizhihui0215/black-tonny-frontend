@@ -237,11 +237,11 @@ watchEffect(() => {
     .slice(0, 4)
     .map((item) => `${item.label} ${item.value}`);
 
-  const fallbackActions = toTextList(payload.value?.execution_board?.today_must_do).map(
-    (title) => ({
-      title,
-    }),
-  );
+  const fallbackActions = toTextList(
+    payload.value?.execution_board?.today_must_do,
+  ).map((title) => ({
+    title,
+  }));
 
   const prompts = Array.from(
     new Set([

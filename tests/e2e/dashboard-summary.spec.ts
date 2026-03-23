@@ -23,14 +23,16 @@ test('refreshes dashboard summary when compact date range changes', async ({
   await page.getByTestId('date-range-apply').click({
     force: true,
   });
-  await expect.poll(() => {
-    const requestUrl = api.summaryRequests.at(-1) ?? '';
-    return (
-      requestUrl.includes('preset=yesterday') ||
-      (requestUrl.includes('preset=custom') &&
-        requestUrl.includes('start_date=2026-03-21') &&
-        requestUrl.includes('end_date=2026-03-21'))
-    );
-  }).toBe(true);
+  await expect
+    .poll(() => {
+      const requestUrl = api.summaryRequests.at(-1) ?? '';
+      return (
+        requestUrl.includes('preset=yesterday') ||
+        (requestUrl.includes('preset=custom') &&
+          requestUrl.includes('start_date=2026-03-21') &&
+          requestUrl.includes('end_date=2026-03-21'))
+      );
+    })
+    .toBe(true);
   await expect(primarySummary).toContainText('¥3,720');
 });

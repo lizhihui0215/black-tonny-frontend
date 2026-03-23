@@ -49,7 +49,9 @@ function cleanText(value: string) {
 function pickPromptMatches(items: string[], prompt: string) {
   const normalized = cleanText(prompt);
   const keywords = ['补货', '会员', '去化', '库存', '店员', '清货', '风险'];
-  const matchedKeyword = keywords.find((keyword) => normalized.includes(keyword));
+  const matchedKeyword = keywords.find((keyword) =>
+    normalized.includes(keyword),
+  );
 
   if (!matchedKeyword) {
     return items;
@@ -64,7 +66,9 @@ function buildWelcomeMessage(context: AiAssistantContext) {
     .slice(0, 3)
     .join('、');
   const summary = cleanText(
-    context.summary || context.description || '我会优先引用当前页已经加载的数据。',
+    context.summary ||
+      context.description ||
+      '我会优先引用当前页已经加载的数据。',
   );
 
   return `这里是右侧 DeepSeek 助手，当前挂在「${context.pageTitle}」页面。我只基于这页已加载的内容回答，不会自己重算指标。${summary} 你可以先问我：${prompts}。`;
@@ -90,7 +94,10 @@ function buildActionReply(context: AiAssistantContext, prompt: string) {
 }
 
 function buildRiskReply(context: AiAssistantContext, prompt: string) {
-  const matched = pickPromptMatches(context.riskPoints ?? [], prompt).slice(0, 3);
+  const matched = pickPromptMatches(context.riskPoints ?? [], prompt).slice(
+    0,
+    3,
+  );
 
   if (matched.length === 0) {
     return buildFallbackReply(context);
@@ -223,7 +230,9 @@ function ensureWelcomeMessage(forceReset: boolean = false) {
   }
 
   if (forceReset || state.messages.length === 0) {
-    state.messages = [createMessage('assistant', buildWelcomeMessage(state.context))];
+    state.messages = [
+      createMessage('assistant', buildWelcomeMessage(state.context)),
+    ];
   }
 }
 
@@ -276,7 +285,10 @@ export async function submitAiAssistantPrompt(prompt: string) {
     state.messages.push(createMessage('assistant', response.reply));
   } catch {
     state.messages.push(
-      createMessage('assistant', buildTransportFallbackReply(content, state.context)),
+      createMessage(
+        'assistant',
+        buildTransportFallbackReply(content, state.context),
+      ),
     );
   } finally {
     state.pending = false;

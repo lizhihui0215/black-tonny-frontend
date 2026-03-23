@@ -11,6 +11,8 @@ test('redirects unauthenticated users to login and renders dashboard after mock 
   await loginAsOwner(page);
 
   await expect(page.getByTestId('dashboard-hero')).toBeVisible();
-  await expect(page.getByTestId('dashboard-summary-primary')).toContainText('¥32,680');
+  await expect(page.getByTestId('dashboard-summary-primary')).toContainText(
+    '¥32,680',
+  );
   await expect(page.getByTestId('dashboard-summary-secondary')).toBeVisible();
 });

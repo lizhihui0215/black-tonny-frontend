@@ -78,7 +78,9 @@ watch(
           >
             <SparklesIcon class="text-sm" />
           </span>
-          <div class="text-center text-[10px] font-semibold tracking-[0.18em] text-[#c26a1c]/70">
+          <div
+            class="text-center text-[10px] font-semibold tracking-[0.18em] text-[#c26a1c]/70"
+          >
             <span class="[writing-mode:vertical-rl]">DEEPSEEK</span>
           </div>
         </div>

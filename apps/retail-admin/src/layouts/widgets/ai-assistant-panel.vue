@@ -46,9 +46,7 @@ const promptSuggestions = computed(() => prompts.value.slice(0, 4));
 const hasUserMessages = computed(() =>
   messages.value.some((message) => message.role === 'user'),
 );
-const showEmptyState = computed(
-  () => !hasUserMessages.value && !pending.value,
-);
+const showEmptyState = computed(() => !hasUserMessages.value && !pending.value);
 const visibleMessages = computed(() => {
   if (!hasUserMessages.value) {
     return [];
@@ -129,7 +127,9 @@ watch(
             <BotIcon class="text-[15px]" />
           </span>
           <div class="min-w-0">
-            <p class="text-[10px] font-semibold tracking-[0.2em] text-[#cf7d2c]">
+            <p
+              class="text-[10px] font-semibold tracking-[0.2em] text-[#cf7d2c]"
+            >
               {{ ASSISTANT_NAME.toUpperCase() }}
             </p>
             <h2 class="truncate text-[14px] font-semibold text-slate-950">
@@ -166,7 +166,10 @@ watch(
       class="flex-1 overflow-y-auto px-4 py-4"
       data-testid="ai-assistant-messages"
     >
-      <div v-if="showEmptyState" class="flex min-h-full flex-col justify-center gap-4 py-2">
+      <div
+        v-if="showEmptyState"
+        class="flex min-h-full flex-col justify-center gap-4 py-2"
+      >
         <article
           class="rounded-[24px] border border-[#efd8c5] bg-[linear-gradient(180deg,#fffdf9_0%,#fff6ed_100%)] p-4 shadow-[0_24px_54px_-42px_rgba(201,106,28,0.34)]"
         >
@@ -178,7 +181,9 @@ watch(
             </span>
 
             <div class="min-w-0">
-              <p class="text-[10px] font-semibold tracking-[0.22em] text-[#cf7d2c]">
+              <p
+                class="text-[10px] font-semibold tracking-[0.22em] text-[#cf7d2c]"
+              >
                 {{ ASSISTANT_NAME.toUpperCase() }} CHAT
               </p>
               <h3 class="mt-1 text-[16px] font-semibold text-slate-950">
@@ -190,7 +195,10 @@ watch(
             </div>
           </div>
 
-          <div v-if="contextHighlights.length" class="mt-4 flex flex-wrap gap-2">
+          <div
+            v-if="contextHighlights.length"
+            class="mt-4 flex flex-wrap gap-2"
+          >
             <span
               v-for="item in contextHighlights"
               :key="item"
@@ -206,11 +214,15 @@ watch(
           data-testid="ai-assistant-prompts"
         >
           <div class="flex items-center justify-between gap-3">
-            <div class="flex min-w-0 items-center gap-2 text-[10px] font-semibold text-[#b36a23]">
+            <div
+              class="flex min-w-0 items-center gap-2 text-[10px] font-semibold text-[#b36a23]"
+            >
               <SparklesIcon class="shrink-0 text-[13px] text-[#d97706]" />
               <span class="truncate">{{ ASSISTANT_NAME }} 建议提问</span>
             </div>
-            <span class="shrink-0 text-[10px] text-slate-400">点一下直接发问</span>
+            <span class="shrink-0 text-[10px] text-slate-400"
+              >点一下直接发问</span
+            >
           </div>
 
           <div class="mt-3 grid gap-2">
@@ -232,12 +244,7 @@ watch(
         </section>
       </div>
 
-      <TransitionGroup
-        v-else
-        name="ai-message"
-        tag="div"
-        class="space-y-3.5"
-      >
+      <TransitionGroup v-else name="ai-message" tag="div" class="space-y-3.5">
         <article
           v-for="message in visibleMessages"
           :key="message.id"
@@ -248,7 +255,9 @@ watch(
               : 'ml-auto max-w-[88%] border-[#f4a65b] bg-[linear-gradient(135deg,#fe9f43_0%,#f58f28_100%)] text-white',
           ]"
         >
-          <p class="mb-1 text-[10px] font-semibold uppercase tracking-[0.2em] opacity-55">
+          <p
+            class="mb-1 text-[10px] font-semibold uppercase tracking-[0.2em] opacity-55"
+          >
             {{ message.role === 'assistant' ? ASSISTANT_NAME : '你' }}
           </p>
           <p class="whitespace-pre-line">{{ message.content }}</p>
@@ -259,7 +268,9 @@ watch(
           key="assistant-pending"
           class="max-w-[90%] rounded-[22px] border border-[#f0dfd1] bg-white px-3.5 py-3 text-[13px] text-slate-500 shadow-[0_20px_40px_-36px_rgba(15,23,42,0.18)]"
         >
-          <p class="mb-1 text-[10px] font-semibold uppercase tracking-[0.2em] opacity-55">
+          <p
+            class="mb-1 text-[10px] font-semibold uppercase tracking-[0.2em] opacity-55"
+          >
             {{ ASSISTANT_NAME }}
           </p>
           <p>{{ ASSISTANT_NAME }} 正在整理这页的经营重点...</p>
@@ -267,7 +278,9 @@ watch(
       </TransitionGroup>
     </div>
 
-    <footer class="border-t border-[#eedccc] bg-[#fff9f3]/95 px-4 py-2.5 backdrop-blur">
+    <footer
+      class="border-t border-[#eedccc] bg-[#fff9f3]/95 px-4 py-2.5 backdrop-blur"
+    >
       <form @submit.prevent="handleSubmit">
         <div
           class="relative rounded-[24px] border border-[#edd7c5] bg-white px-3 py-2.5 shadow-[0_18px_40px_-32px_rgba(201,106,28,0.22)]"

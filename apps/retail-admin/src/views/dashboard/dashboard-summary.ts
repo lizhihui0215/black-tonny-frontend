@@ -9,11 +9,7 @@ import type {
   DashboardStatusTone,
 } from './dashboard-presentation';
 
-import {
-  addDays,
-  formatDateToken,
-  startOfDay,
-} from '#/utils/date-range';
+import { addDays, formatDateToken, startOfDay } from '#/utils/date-range';
 import { formatMoney, formatQuantity } from '#/utils/black-tonny';
 
 type DashboardSummaryTranslate = (key: string) => string;
@@ -133,7 +129,10 @@ function formatSummaryMetricValue(metric?: DashboardSummaryMetric) {
   return formatQuantity(metric.value, metric.unit || undefined);
 }
 
-function formatCompareValue(metric?: DashboardSummaryMetric, t?: DashboardSummaryTranslate) {
+function formatCompareValue(
+  metric?: DashboardSummaryMetric,
+  t?: DashboardSummaryTranslate,
+) {
   if (!metric) {
     return '--';
   }
@@ -143,9 +142,7 @@ function formatCompareValue(metric?: DashboardSummaryMetric, t?: DashboardSummar
   }
 
   if (metric.compareDirection === 'flat' || metric.compareValue === 0) {
-    return t
-      ? t('page.dashboardSummary.compare.noChange')
-      : '较上期无变化';
+    return t ? t('page.dashboardSummary.compare.noChange') : '较上期无变化';
   }
 
   const absoluteValue = Math.abs(metric.compareValue);

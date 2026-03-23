@@ -33,11 +33,11 @@ function hasUsableStorage(
 ): value is Storage {
   return Boolean(
     value &&
-      typeof value.getItem === 'function' &&
-      typeof value.setItem === 'function' &&
-      typeof value.removeItem === 'function' &&
-      typeof value.clear === 'function' &&
-      typeof value.key === 'function',
+    typeof value.getItem === 'function' &&
+    typeof value.setItem === 'function' &&
+    typeof value.removeItem === 'function' &&
+    typeof value.clear === 'function' &&
+    typeof value.key === 'function',
   );
 }
 

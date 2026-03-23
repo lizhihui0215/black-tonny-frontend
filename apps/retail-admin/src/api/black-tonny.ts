@@ -39,8 +39,7 @@ export async function loadDashboardSummary(params: {
     ...(params.endDate ? { end_date: params.endDate } : {}),
   };
 
-  return requestClient.get<DashboardSummaryResponse>(
-    DASHBOARD_SUMMARY_PATH,
-    { params: query },
-  );
+  return requestClient.get<DashboardSummaryResponse>(DASHBOARD_SUMMARY_PATH, {
+    params: query,
+  });
 }

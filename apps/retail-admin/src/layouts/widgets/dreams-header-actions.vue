@@ -87,7 +87,8 @@ async function toggleFullscreen() {
     </button>
 
     <button
-      class="dreams-action hidden lg:inline-flex" :class="[
+      class="dreams-action hidden lg:inline-flex"
+      :class="[
         aiAssistantOpen
           ? 'dreams-action--assistant-active'
           : 'dreams-action--assistant',
@@ -215,15 +216,21 @@ async function toggleFullscreen() {
 
 .dreams-action--assistant {
   color: #c26a1c;
-  background:
-    linear-gradient(135deg, rgb(255 250 245 / 100%), rgb(255 243 232 / 100%));
+  background: linear-gradient(
+    135deg,
+    rgb(255 250 245 / 100%),
+    rgb(255 243 232 / 100%)
+  );
   border-color: #f1d8c1;
 }
 
 .dreams-action--assistant-active {
   color: #fff;
-  background:
-    linear-gradient(135deg, rgb(254 159 67 / 100%), rgb(245 143 40 / 100%));
+  background: linear-gradient(
+    135deg,
+    rgb(254 159 67 / 100%),
+    rgb(245 143 40 / 100%)
+  );
   border-color: #f58f28;
   box-shadow: 0 18px 34px -24px rgb(245 143 40 / 55%);
 }

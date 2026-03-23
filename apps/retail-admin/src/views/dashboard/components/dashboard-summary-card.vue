@@ -72,7 +72,9 @@ const iconComponent = computed(() => createIconifyIcon(props.icon));
 const primaryCardClass = computed(() => primaryCardClassMap[props.accent]);
 const primaryIconClass = computed(() => primaryIconClassMap[props.accent]);
 const secondaryIconClass = computed(() => secondaryIconClassMap[props.accent]);
-const compareBadgeClass = computed(() => compareBadgeClassMap[props.compareTone]);
+const compareBadgeClass = computed(
+  () => compareBadgeClassMap[props.compareTone],
+);
 </script>
 
 <template>

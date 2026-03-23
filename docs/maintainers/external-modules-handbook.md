@@ -24,8 +24,7 @@
    - access model
    - theme/token chain
    - shared ui kit
-   - Vite/Tailwind/tooling
-   冲突？
+   - Vite/Tailwind/tooling冲突？
 4. 它是否会制造第二套长期体系？
 
 ## 当前仓库的高风险引入方式

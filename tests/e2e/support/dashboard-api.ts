@@ -72,7 +72,10 @@ export async function installDashboardApiMocks(
     const { pathname, searchParams } = url;
     const normalizedPathname = pathname.replace(/\/+$/, '') || '/';
 
-    if (request.method() === 'GET' && normalizedPathname.endsWith('/api/manifest')) {
+    if (
+      request.method() === 'GET' &&
+      normalizedPathname.endsWith('/api/manifest')
+    ) {
       await fulfillJson(route, createEnvelope(createManifestFixture()));
       return;
     }
@@ -85,11 +88,15 @@ export async function installDashboardApiMocks(
       const payload = readPagePayload(pageKey);
 
       if (!payload) {
-        await fulfillJson(route, {
-          code: 404,
-          data: null,
-          message: `E2E fixture for page "${pageKey}" not found.`,
-        }, 404);
+        await fulfillJson(
+          route,
+          {
+            code: 404,
+            data: null,
+            message: `E2E fixture for page "${pageKey}" not found.`,
+          },
+          404,
+        );
         return;
       }
 

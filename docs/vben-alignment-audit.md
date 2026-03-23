@@ -290,9 +290,9 @@
 
 当前位置：
 
-- [packages/@core/ui-kit/*](../packages/@core/ui-kit)
-- [internal/vite-config/*](../internal/vite-config)
-- [internal/lint-configs/*](../internal/lint-configs)
+- [packages/@core/ui-kit/\*](../packages/@core/ui-kit)
+- [internal/vite-config/\*](../internal/vite-config)
+- [internal/lint-configs/\*](../internal/lint-configs)
 
 当前状态：
 
@@ -311,7 +311,7 @@
 
 - [playwright.config.ts](../playwright.config.ts)
 - [tests/e2e](../tests/e2e)
-- [apps/retail-admin/src/views/_core/authentication/login.vue](../apps/retail-admin/src/views/_core/authentication/login.vue)
+- [apps/retail-admin/src/views/\_core/authentication/login.vue](../apps/retail-admin/src/views/_core/authentication/login.vue)
 - [apps/retail-admin/src/views/shared/dashboard-shell.vue](../apps/retail-admin/src/views/shared/dashboard-shell.vue)
 - [apps/retail-admin/src/layouts/widgets/ai-assistant-sidebar.vue](../apps/retail-admin/src/layouts/widgets/ai-assistant-sidebar.vue)
 - [apps/retail-admin/src/layouts/widgets/ai-assistant-panel.vue](../apps/retail-admin/src/layouts/widgets/ai-assistant-panel.vue)

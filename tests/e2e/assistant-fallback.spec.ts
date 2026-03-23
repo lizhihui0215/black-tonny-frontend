@@ -20,5 +20,7 @@ test('falls back to local assistant reply when transport fails', async ({
     'assistant 接口暂未成功返回，我先基于当前页已加载内容给你一个快速判断：',
   );
   await expect(messages).toContainText('今天先做什么');
-  await expect(messages).not.toContainText('DeepSeek 正在整理这页的经营重点...');
+  await expect(messages).not.toContainText(
+    'DeepSeek 正在整理这页的经营重点...',
+  );
 });

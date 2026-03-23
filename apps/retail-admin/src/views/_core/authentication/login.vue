@@ -11,8 +11,7 @@ import { useAuthStore } from '#/store';
 defineOptions({ name: 'Login' });
 
 const authStore = useAuthStore();
-const isE2ECaptchaBypassed =
-  import.meta.env.VITE_E2E_BYPASS_CAPTCHA === 'true';
+const isE2ECaptchaBypassed = import.meta.env.VITE_E2E_BYPASS_CAPTCHA === 'true';
 
 const formSchema = computed((): VbenFormSchema[] => {
   const schema: VbenFormSchema[] = [
