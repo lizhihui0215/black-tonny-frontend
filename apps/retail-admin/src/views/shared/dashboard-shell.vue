@@ -7,12 +7,13 @@ import type {
 
 import { computed, onMounted, ref, watchEffect } from 'vue';
 
-import { loadDashboardSummary } from '#/api';
-import DateRangeTrigger from '#/components/date-range-trigger.vue';
-import { setAiAssistantContext } from '#/composables/use-ai-assistant';
 import { Page } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { useI18n } from '@vben/locales';
+
+import { loadDashboardSummary } from '#/api';
+import DateRangeTrigger from '#/components/date-range-trigger.vue';
+import { setAiAssistantContext } from '#/composables/use-ai-assistant';
 import {
   normalizeDateRangeInput,
   serializeDateRange,
@@ -56,6 +57,10 @@ function toOptionalText(value: unknown) {
   return text.length > 0 ? text : undefined;
 }
 
+function isDefined<T>(value: T | null | undefined): value is T {
+  return value != null;
+}
+
 function toTextList(value: unknown) {
   if (!Array.isArray(value)) {
     return [];
@@ -63,7 +68,7 @@ function toTextList(value: unknown) {
 
   return value
     .map((item) => toOptionalText(item))
-    .filter((item): item is string => Boolean(item));
+    .filter(isDefined);
 }
 
 const { locale, t } = useI18n();
@@ -136,7 +141,7 @@ const healthLightAlerts = computed(() =>
 
       return note ? `${title}：${note}` : title;
     })
-    .filter((item): item is string => Boolean(item)),
+    .filter(isDefined),
 );
 const consultingRiskAlerts = computed(() =>
   toTextList(consultingAnalysisRecord.value?.risk_alerts),
@@ -156,7 +161,7 @@ const dashboardTipAlerts = computed(() =>
 
       return term ? `${term}：${watch}` : watch;
     })
-    .filter((item): item is string => Boolean(item)),
+    .filter(isDefined),
 );
 const primaryAlert = computed(() => {
   const text =
@@ -227,14 +232,12 @@ watchEffect(() => {
     .slice(0, 4)
     .map((item) => `${item.label} ${item.value}，${item.compareText}`);
 
-  const riskPoints = Array.from(
-    new Set([
+  const riskPoints = [...new Set([
       ...executionRiskAlerts.value,
       ...consultingRiskAlerts.value,
       ...healthLightAlerts.value,
       ...dashboardTipAlerts.value,
-    ]),
-  ).slice(0, 4);
+    ])].slice(0, 4);
 
   const managerActions = executionButtons.value
     .map((item) => {
@@ -250,14 +253,7 @@ watchEffect(() => {
         title,
       };
     })
-    .filter(
-      (
-        item,
-      ): item is {
-        note: string;
-        title: string;
-      } => Boolean(item),
-    );
+    .filter(isDefined);
 
   const staffActions = toTextList(
     asRecord(props.payload?.execution_board?.role_actions)?.['店员'],
@@ -265,9 +261,9 @@ watchEffect(() => {
   const todayTasks = toTextList(props.payload?.today_focus?.tasks);
   const sourceNote = summaryLoading.value
     ? '正在读取 /api/dashboard/summary。'
-    : summaryError.value
+    : (summaryError.value
       ? 'summary 接口暂未成功返回，当前会结合页面 payload 与 summary 空态回答。'
-      : `当前区间 ${summaryFilterState.value.startDate} 至 ${summaryFilterState.value.endDate}。`;
+      : `当前区间 ${summaryFilterState.value.startDate} 至 ${summaryFilterState.value.endDate}。`);
 
   setAiAssistantContext({
     actions:
@@ -280,14 +276,7 @@ watchEffect(() => {
                   title: primaryAlert.value.text,
                 }
               : undefined,
-          ].filter(
-            (
-              item,
-            ): item is {
-              note: string;
-              title: string;
-            } => Boolean(item),
-          ),
+          ].filter(isDefined),
     description: dashboardPageSpec.businessGoal,
     guardrails: [
       '顶部 summary 的指标口径以后端接口返回为准。',
@@ -306,7 +295,7 @@ watchEffect(() => {
     ],
     riskPoints,
     sourceNote,
-    staffTips: Array.from(new Set([...staffActions, ...todayTasks])).slice(
+    staffTips: [...new Set([...staffActions, ...todayTasks])].slice(
       0,
       4,
     ),

@@ -8,15 +8,15 @@ import type {
 import { computed, onMounted, ref, watchEffect } from 'vue';
 
 import { loadBlackTonnyPayload } from '#/api';
-import { setAiAssistantContext } from '#/composables/use-ai-assistant';
 import DateRangeTrigger from '#/components/date-range-trigger.vue';
 import SummaryCardGroup from '#/components/summary-card-group.vue';
-import { buildTrailingRange } from '#/utils/date-range';
+import { setAiAssistantContext } from '#/composables/use-ai-assistant';
 import {
   buildSummaryCardItems,
   formatDateTime,
   formatEmptyValue,
 } from '#/utils/black-tonny';
+import { buildTrailingRange } from '#/utils/date-range';
 
 import DashboardShell from './dashboard-shell.vue';
 import PageShellContent from './page-shell-content.vue';
@@ -39,6 +39,10 @@ function toOptionalText(value: unknown) {
   return text.length > 0 ? text : undefined;
 }
 
+function isDefined<T>(value: T | null | undefined): value is T {
+  return value != null;
+}
+
 function toTextList(value: unknown) {
   if (!Array.isArray(value)) {
     return [];
@@ -46,7 +50,7 @@ function toTextList(value: unknown) {
 
   return value
     .map((item) => toOptionalText(item))
-    .filter((item): item is string => Boolean(item));
+    .filter(isDefined);
 }
 
 const manifest = ref<BlackTonnyManifest>();
@@ -161,7 +165,7 @@ watchEffect(() => {
     ? bossBrief.focus_tags
         .map((item) => asRecord(item))
         .map((item) => toOptionalText(item?.label))
-        .filter((item): item is string => Boolean(item))
+        .filter(isDefined)
     : [];
 
   const managerActions = Array.isArray(aiAnalysis?.manager_actions)
@@ -179,19 +183,12 @@ watchEffect(() => {
 
           return {
             note: [why, nextLabel ? `下一步：${nextLabel}` : '']
-              .filter(Boolean)
+              .filter(isDefined)
               .join(' '),
             title,
           };
         })
-        .filter(
-          (
-            item,
-          ): item is {
-            note: string;
-            title: string;
-          } => Boolean(item),
-        )
+        .filter(isDefined)
     : [];
 
   const staffTips = Array.isArray(aiAnalysis?.staff_sync)
@@ -202,7 +199,7 @@ watchEffect(() => {
           const instruction = toOptionalText(item?.instruction);
           return instruction || title;
         })
-        .filter((item): item is string => Boolean(item))
+        .filter(isDefined)
     : toTextList(payload.value?.today_focus?.tasks);
 
   const riskPoints = Array.isArray(aiAnalysis?.risk_explanations)
@@ -218,7 +215,7 @@ watchEffect(() => {
 
           return check ? `${issue}。先看：${check}` : issue;
         })
-        .filter((item): item is string => Boolean(item))
+        .filter(isDefined)
     : (payload.value?.health_lights ?? [])
         .map((item) => {
           const title = toOptionalText(item.title);
@@ -230,7 +227,7 @@ watchEffect(() => {
 
           return note ? `${title}：${note}` : title;
         })
-        .filter((item): item is string => Boolean(item));
+        .filter(isDefined);
 
   const summaryMetrics = summaryCards.value
     .filter((item) => item.value !== '--')
@@ -243,14 +240,12 @@ watchEffect(() => {
     title,
   }));
 
-  const prompts = Array.from(
-    new Set([
+  const prompts = [...new Set([
       ...focusTags,
       '今天先做什么',
-      '给店员怎么同步',
       '有哪些风险需要先盯',
-    ]),
-  ).slice(0, 4);
+      '给店员怎么同步',
+    ])].slice(0, 4);
 
   const sourceNote = [
     manifest.value?.analysis_batch_id
@@ -331,7 +326,7 @@ watchEffect(() => {
             </span>
           </div>
 
-          <div v-if="decisionBadges.length" class="mt-4 flex flex-wrap gap-2">
+          <div v-if="decisionBadges.length > 0" class="mt-4 flex flex-wrap gap-2">
             <el-tag
               v-for="badge in decisionBadges"
               :key="badge"
