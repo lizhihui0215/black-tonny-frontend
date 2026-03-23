@@ -48,9 +48,7 @@ function toTextList(value: unknown) {
     return [];
   }
 
-  return value
-    .map((item) => toOptionalText(item))
-    .filter(isDefined);
+  return value.map((item) => toOptionalText(item)).filter(isDefined);
 }
 
 const manifest = ref<BlackTonnyManifest>();
@@ -240,12 +238,14 @@ watchEffect(() => {
     title,
   }));
 
-  const prompts = [...new Set([
+  const prompts = [
+    ...new Set([
       ...focusTags,
       '今天先做什么',
       '有哪些风险需要先盯',
       '给店员怎么同步',
-    ])].slice(0, 4);
+    ]),
+  ].slice(0, 4);
 
   const sourceNote = [
     manifest.value?.analysis_batch_id
@@ -326,7 +326,10 @@ watchEffect(() => {
             </span>
           </div>
 
-          <div v-if="decisionBadges.length > 0" class="mt-4 flex flex-wrap gap-2">
+          <div
+            v-if="decisionBadges.length > 0"
+            class="mt-4 flex flex-wrap gap-2"
+          >
             <el-tag
               v-for="badge in decisionBadges"
               :key="badge"

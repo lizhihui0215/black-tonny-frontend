@@ -66,9 +66,7 @@ function toTextList(value: unknown) {
     return [];
   }
 
-  return value
-    .map((item) => toOptionalText(item))
-    .filter(isDefined);
+  return value.map((item) => toOptionalText(item)).filter(isDefined);
 }
 
 const { locale, t } = useI18n();
@@ -232,12 +230,14 @@ watchEffect(() => {
     .slice(0, 4)
     .map((item) => `${item.label} ${item.value}，${item.compareText}`);
 
-  const riskPoints = [...new Set([
+  const riskPoints = [
+    ...new Set([
       ...executionRiskAlerts.value,
       ...consultingRiskAlerts.value,
       ...healthLightAlerts.value,
       ...dashboardTipAlerts.value,
-    ])].slice(0, 4);
+    ]),
+  ].slice(0, 4);
 
   const managerActions = executionButtons.value
     .map((item) => {
@@ -261,9 +261,9 @@ watchEffect(() => {
   const todayTasks = toTextList(props.payload?.today_focus?.tasks);
   const sourceNote = summaryLoading.value
     ? '正在读取 /api/dashboard/summary。'
-    : (summaryError.value
+    : summaryError.value
       ? 'summary 接口暂未成功返回，当前会结合页面 payload 与 summary 空态回答。'
-      : `当前区间 ${summaryFilterState.value.startDate} 至 ${summaryFilterState.value.endDate}。`);
+      : `当前区间 ${summaryFilterState.value.startDate} 至 ${summaryFilterState.value.endDate}。`;
 
   setAiAssistantContext({
     actions:
@@ -295,10 +295,7 @@ watchEffect(() => {
     ],
     riskPoints,
     sourceNote,
-    staffTips: [...new Set([...staffActions, ...todayTasks])].slice(
-      0,
-      4,
-    ),
+    staffTips: [...new Set([...staffActions, ...todayTasks])].slice(0, 4),
     summary: summaryError.value
       ? '顶部 summary 暂未拿到完整接口结果，先结合页面 payload 判断。'
       : `当前区间为 ${summaryFilterState.value.startDate} 到 ${summaryFilterState.value.endDate}，先看顶部 8 张卡，再下钻到正式 payload 区块。`,
