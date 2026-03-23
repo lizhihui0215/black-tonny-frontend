@@ -54,6 +54,8 @@
 
 - `frontend-mainline.yml` 是默认主线，跑 `pnpm check:mainline`
 - `dashboard-e2e.yml` 是 runtime 护栏，跑 `pnpm test:e2e:dashboard`
+- 当前仓库的 `main` 分支保护基线是：要求 `Frontend Mainline` 和 `Dashboard E2E` 两条检查通过后再合并
+- 当前默认不强制 PR review；如果未来进入多人协作，再单独提升这条保护策略
 - 如果后续需要进一步控成本，可以只保留 `frontend-mainline.yml` 常开，把 `dashboard-e2e.yml` 改成手动或路径更窄的触发
 - 当前仓库已移除 upstream 模板里那些不再服务本仓的 GitHub workflow，只保留这两条 repo-owned 主线，避免 Actions 页面持续堆积无效自动化噪音
 - 当前仓库的 Dependabot 只保留 `npm` 生态，并固定为 `weekly + open-pull-requests-limit: 2 + semver-major ignore`
