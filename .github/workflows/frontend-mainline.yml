@@ -1,0 +1,60 @@
+name: Frontend Mainline
+
+on:
+  pull_request:
+    paths:
+      - 'apps/retail-admin/**'
+      - 'packages/**'
+      - 'internal/**'
+      - 'docs/**'
+      - 'scripts/**'
+      - '.github/actions/setup-node/**'
+      - '.github/workflows/frontend-mainline.yml'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.node-version'
+      - '.nvmrc'
+      - 'lefthook.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/retail-admin/**'
+      - 'packages/**'
+      - 'internal/**'
+      - 'docs/**'
+      - 'scripts/**'
+      - '.github/actions/setup-node/**'
+      - '.github/workflows/frontend-mainline.yml'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.node-version'
+      - '.nvmrc'
+      - 'lefthook.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  CI: true
+  TZ: Asia/Shanghai
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  mainline:
+    name: Frontend Mainline
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node
+
+      - name: Run no-drift baseline
+        run: pnpm check:mainline

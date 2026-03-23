@@ -16,15 +16,24 @@
   },
   "type": "module",
   "scripts": {
-    "build": "pnpm -F @vben/web-ele run build",
+    "build": "pnpm -F @black-tonny/retail-admin run build",
+    "check:all": "pnpm check:runtime",
+    "check:mainline": "pnpm standards:check && pnpm docs:check && pnpm typecheck",
+    "check:runtime": "pnpm check:mainline && pnpm build && pnpm test:e2e:dashboard",
     "clean": "node ./scripts/clean.mjs",
-    "dev": "pnpm -F @vben/web-ele run dev",
+    "clean:local:apply": "node ./scripts/clean-local-preserve-config.mjs --apply",
+    "clean:local:plan": "node ./scripts/clean-local-preserve-config.mjs",
+    "dev": "pnpm -F @black-tonny/retail-admin run dev",
+    "docs:check": "node ./scripts/check-docs.mjs",
     "postinstall": "pnpm -r run stub --if-present",
     "preinstall": "npx only-allow pnpm",
     "prepare": "pnpm exec lefthook install",
+    "standards:check": "node ./scripts/check-frontend-standards.mjs",
     "sync:data": "node ./scripts/sync-black-tonny-data.mjs",
+    "test:e2e:dashboard": "playwright test --config=playwright.config.ts",
     "test:unit": "vitest run --dom",
-    "typecheck": "pnpm -F @vben/web-ele run typecheck"
+    "typecheck": "pnpm -F @black-tonny/retail-admin run typecheck",
+    "upstream:check": "node ./scripts/check-upstream-customizations.mjs"
   },
   "devDependencies": {
     "@changesets/changelog-github": "catalog:",

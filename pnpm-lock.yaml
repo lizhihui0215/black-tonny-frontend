@@ -568,7 +568,7 @@ importers:
         specifier: 'catalog:'
         version: 3.2.6(typescript@5.9.3)
 
-  apps/web-ele:
+  apps/retail-admin:
     dependencies:
       '@vben/access':
         specifier: workspace:*

@@ -1,77 +1,264 @@
-# Black Tonny 前端技术架构深度解析
+# Black Tonny Frontend Architecture
 
-本文档旨在从架构设计、模块解耦、数据流转及样式链路四个维度，深挖本项目（基于 Vben v5）的底层实现逻辑。
+This document is the primary architecture reference for `black-tonny-frontend`.
 
----
+It explains:
 
-## 1. Monorepo 模块化策略 (Workspace Strategy)
+- what this repository owns in the split frontend/backend model
+- how the current `retail-admin` app is composed
+- where page data comes from today
+- which responsibilities belong to the frontend layer
 
-项目采用 `pnpm workspace` 管理，核心原则是 **“核心逻辑与 UI 实现彻底解耦”**。
+For topic-level detail, use [docs/README.md](./docs/README.md).
 
-- **`@vben/*` (Core Packages)**: 框架内核。包含基础 UI 逻辑抽象 (`ui-kit`)、全局偏好管理 (`preferences`)、权限引擎 (`access`)。
-  - **设计约束**: 此目录下的所有包禁止直接引用任何具体 UI 组件库（如 Element Plus）。
-- **`packages/effects` (Side Effects)**: 承载具有外部环境依赖的业务副作用。
-  - `request`: 基于 Axios 的二次封装，处理 Token 刷新、通用异常拦截。
-  - `layouts`: 定义系统级的 Shell 结构（侧边栏、顶栏、多页签渲染逻辑）。
-- **`apps/web-ele` (Main Application)**: 业务汇聚与运行时。负责注入具体 UI 库并实现最终的业务视图。
+## Repository Role
 
----
+`black-tonny-frontend` is the page-layer repository for Black Tonny.
 
-## 2. 适配器模式：UI 库的解耦 (The Adapter Pattern)
+Its current responsibilities are:
 
-项目通过 **Adapter 层** 解决了业务逻辑对特定 UI 框架的硬依赖。
+- provide the `retail-admin` application shell on top of `vue-vben-admin v5`
+- own page routing, page composition, and shared business panels
+- own theme preferences, layout behavior, and presentation-level interaction rules
+- own the layout-level AI assistant sidebar and page-context-to-chat presentation bridge
+- render the current dashboard experience from backend page payloads, dashboard summary responses, and assistant chat replies
 
-### 核心实现：`apps/web-ele/src/adapter`
-- **组件适配 (Component Adapter)**: 在 `bootstrap` 阶段，通过 `initComponentAdapter` 将抽象组件标识（如 `VbenInput`）映射到 Element Plus 的 `ElInput`。
-- **表单解耦 (Form Adapter)**: `vben-form` 并不持有具体渲染逻辑。它通过配置化的 Schema，根据运行时注入的适配器动态渲染 UI。
-- **性能优化**: 适配器内部大量使用 `defineAsyncComponent`（异步组件），确保组件只有在页面实际用到时才会被按需加载，有效减小首屏体积。
+The frontend is still in a mixed transition stage:
 
----
+- main page payloads now load through backend `manifest/pages` APIs
+- dashboard summary and assistant chat already run through backend APIs
+- bootstrap sample files are still useful for local UI work and backend bootstrap fallback, but they are no longer the formal frontend runtime source
 
-## 3. 页面生命周期与构造 (Page Lifecycle)
+## Runtime Overview
 
-在本项目中，一个标准页面的渲染路径如下：
+```mermaid
+flowchart LR
+    subgraph Workspace["pnpm workspace"]
+        CORE["@vben/* core packages"]
+        EFFECTS["packages/effects/*"]
+        APP["apps/retail-admin"]
+    end
 
-1.  **路由定义 (`router/routes`)**: 声明式定义路径与 Meta 信息（包含权限标识、页面缓存配置）。
-2.  **布局调度 (`layouts`)**: 路由守卫根据 Meta 选择布局模版（如 `BasicLayout`）。
-3.  **容器注入 (`Page` / `page-shell`)**: 
-    - 统一管理页面 Header、Content 区域、面包屑及滚动行为。
-    - 自动适配全屏显示、加载动画（Loading）等交互规范。
-4.  **业务组件 (`views`)**: 
-    - **逻辑层**: 使用 Composition API (`<script setup>`)。
-    - **UI 层**: 严格遵循 `Tailwind CSS v4` 规范，通过原子类实现精细化布局，避免 CSS 全局污染。
+    subgraph Runtime["retail-admin runtime"]
+        BOOT["bootstrap.ts"]
+        ROUTER["router/routes/modules/dashboard.ts"]
+        SHELL["views/shared/page-shell.vue"]
+        SPECS["views/shared/page-specs.ts"]
+        PANELS["shared business panels"]
+        ASSISTANT["layouts/widgets/ai-assistant-sidebar.vue"]
+        PREF["preferences.ts"]
+    end
 
----
+    subgraph Data["Current data sources"]
+        MANIFEST["/api/manifest"]
+        PAGEAPI["/api/pages/{page_key}"]
+        SUMMARY["/api/dashboard/summary"]
+        CHAT["/api/assistant/chat"]
+    end
 
-## 5. 样式链路与主题控制 (Styling & Theme Chain)
+    CORE --> APP
+    EFFECTS --> APP
+    PREF --> BOOT
+    BOOT --> ROUTER
+    ROUTER --> SHELL
+    SPECS --> SHELL
+    SHELL --> PANELS
+    BOOT --> ASSISTANT
+    SHELL --> MANIFEST
+    SHELL --> PAGEAPI
+    SHELL --> SUMMARY
+    ASSISTANT --> CHAT
+```
 
-项目弃用了传统的 CSS 覆盖方案，采用基于 **CSS Variables** 的动态响应体系。
+## Layered Structure
 
-- **动态变量**: 在 `apps/web-ele/src/preferences.ts` 中定义的全局配置（如颜色、间距），会实时同步至 HTML 根节点的 CSS 变量。
-- **Tailwind 桥接**: Tailwind 的颜色类（如 `text-primary`）直接映射到对应的 CSS 变量上。
-- **全栈同步**: 切换主题色时，只需修改根变量，全站（包括 Element Plus 的全局变量）会同步更新。
+### 1. Workspace and base packages
 
----
+The repository uses a `pnpm workspace` structure so that framework-level capabilities and business-facing page composition are not collapsed into a single application directory.
 
-## 6. 数据流与网络层 (Data & Networking)
+Important layers:
 
-### 请求链路分析：
-1.  **接口声明**: 在 `src/api` 中定义具名函数，并声明 TypeScript 类型。
-2.  **拦截器机制 (`packages/effects/request`)**:
-    - **Auth Interceptor**: 自动从 Store 获取 Token 并注入 Header。
-    - **Refresh Interceptor**: 侦测到 Token 过期时，自动发起刷新请求，并在成功后重试失败的业务请求。
-3.  **状态管理 (Pinia)**: 存放非持久化的全局状态（用户权限、菜单列表）。
+- `@vben/*`
+  - base preferences, layouts, utilities, and framework integrations
+- `packages/effects/*`
+  - environment-dependent capabilities such as request, layouts, and plugins
+- `apps/retail-admin`
+  - the current Black Tonny business application
 
----
+Business-facing frontend work should usually happen in `apps/retail-admin` unless a real shared-base change is required.
 
-## 7. 工程化标准 (Engineering Standards)
+### 2. Bootstrap and shell
 
-- **类型安全**: 通过 `packages/types` 强制约束前后端契约。
-- **质量保障**:
-  - `oxlint`: 提供极速的代码静态扫描。
-  - `stylelint`: 约束 CSS 书写规范，严禁在页面内编写大量重复的 Style 块。
-  - `lefthook`: 在 `git commit` 阶段拦截不符合规范的代码。
+Frontend startup begins in `apps/retail-admin/src/bootstrap.ts`.
 
----
+The bootstrap path currently:
 
-*注：若需进行具体业务改动，请遵循 `docs/frontend-change-standard.md` 中的“vben 底座 + Black Tonny 业务视觉”原则。*
+- initializes the component adapter
+- initializes the form adapter
+- installs Element Plus
+- initializes i18n, stores, directives, router, and motion plugins
+- keeps the document title synchronized through `preferences`
+
+Global behavior should enter through this bootstrap path instead of being reintroduced ad hoc inside page components.
+
+### 3. Route-to-page flow
+
+The current business page entrypoints are defined in `src/router/routes/modules/dashboard.ts`.
+
+Runtime flow:
+
+1. a route resolves to a page component
+2. the page passes its `pageKey` into `page-shell.vue`
+3. `page-shell.vue` reads the corresponding `PageSpec`
+4. `PageSpec` decides:
+   - hero mode
+   - shell kind
+   - summary priority
+   - primary chart
+   - table order
+   - default expanded and collapsed blocks
+5. `page-shell.vue` either renders the standard shell or delegates to a shared shell renderer such as `dashboard`
+6. shared panels render the data without inventing separate page systems
+
+This means `PageSpec + page-shell + shared components` is the core page model of the current frontend.
+
+### 3.5. Layout-level assistant flow
+
+The current app shell also includes a layout-level right-side AI assistant sidebar.
+
+Its current behavior is:
+
+- the layout owns the sidebar frame, desktop docking, mobile drawer fallback, and top-right entry button
+- each page pushes already-loaded page context into the shared assistant state
+- the frontend submits chat prompts to the backend `POST /api/assistant/chat` contract
+- a local rule-based fallback still exists only for unavailable-backend local development scenarios
+- a future real DeepSeek or streaming backend can replace the provider step without reworking the layout slot or page-context bridge
+
+### 4. Shared component layer
+
+Shared business panels live under `apps/retail-admin/src/components/*`.
+
+Examples include:
+
+- summary card groups
+- execution panels
+- consulting panels
+- health-light panels
+- relationship panels
+
+These components should:
+
+- render already-shaped payload fragments
+- follow the established Black Tonny page language
+- tolerate empty states, missing fields, and partial payloads
+
+They should not:
+
+- redefine business metrics
+- change API contracts
+- duplicate backend-owned calculations
+
+## Data Flow
+
+### Current page payload path
+
+The main business page data path currently lives in `apps/retail-admin/src/api/black-tonny.ts`.
+
+Current flow:
+
+1. `loadBlackTonnyManifest()` requests `GET /api/manifest`
+2. `loadBlackTonnyPayload(pageKey)` reads `available_pages` from the manifest response
+3. the page payload is requested from `GET /api/pages/{page_key}`
+
+Important implication:
+
+- main Black Tonny page payloads now go through the shared request layer
+- the frontend runtime no longer directly reads `public/data/*`
+- repo-local page payload fixtures now live under `tests/e2e/fixtures/pages`, while formal runtime page payloads come from backend APIs
+
+This is already the formal runtime source-of-truth path.
+
+### Current summary API path
+
+Dashboard summary is already separated from the local page-payload path:
+
+- `loadDashboardSummary()` calls `GET /api/dashboard/summary`
+
+Today, the frontend runtime consumes backend API data for:
+
+- manifest and page payloads
+- dashboard summary cards
+- right-side assistant chat replies
+
+### Request-layer status
+
+The repository still includes `apps/retail-admin/src/api/request.ts` and the `@vben/request` infrastructure for standard framework-level flows such as auth, menus, and user info.
+
+The main Black Tonny page payload path now also depends on that request client.
+
+That means the formal data path is aligned with the repo request standard again.
+
+### Current auth path
+
+The current frontend auth path stays on the frontend side for the single-owner mode:
+
+- login uses the documented centralized mock owner provider
+- router guard and access bootstrap still reuse the same `auth store + access store + user store` chain
+- business runtime APIs such as `manifest`, `pages`, `dashboard summary`, and `assistant chat` are not gated by a frontend bearer token
+
+The frontend still uses `frontend` access mode for route generation, but the current login state does not depend on a live backend auth contract.
+
+## Theme and UI Contract
+
+### `preferences.ts` is the theme entrypoint
+
+`apps/retail-admin/src/preferences.ts` is the formal entrypoint for global theme and layout preferences.
+
+It currently owns:
+
+- default home path
+- content compactness and layout width
+- sidebar and header behavior
+- primary theme color
+- light-mode and semi-dark choices
+
+Global-looking theme behavior should start there instead of being hard-coded across page-level styles.
+
+### Adapter and UI-library boundary
+
+Element Plus is the current UI component library, but the business layer does not connect to the application shell only through direct component usage.
+
+The adapter layer lives in:
+
+- `src/adapter/component`
+- `src/adapter/form.ts`
+- `src/adapter/vxe-table.ts`
+
+That layer maps framework abstractions into the current concrete UI implementation and helps keep the page layer aligned with the `vben` base system.
+
+## Frontend Ownership
+
+The frontend owns:
+
+- page routing and page entrypoints
+- page composition through `PageSpec`, `page-shell`, and shared panels
+- visual hierarchy, presentation pacing, and empty-state behavior
+- theme preferences and layout presentation
+- right-side assistant layout behavior and page-context chat presentation
+- display-side type handling and payload tolerance
+
+The frontend does not own:
+
+- summary metric semantics
+- compare-range and date-range calculation logic
+- capture-side audit logic
+- `capture` / `serving` database modeling
+- rebuild, transform, and batch lifecycle logic
+
+When a change affects both page presentation and backend metric semantics, the backend contract should lead and the frontend rendering should follow it.
+
+## Related Docs
+
+- [docs/README.md](./docs/README.md)
+- Optional sibling backend architecture:
+  - `../black-tonny-backend/ARCHITECTURE.md`

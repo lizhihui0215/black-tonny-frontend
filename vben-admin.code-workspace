@@ -1,8 +1,8 @@
 {
   "folders": [
     {
-      "name": "@vben/web-ele",
-      "path": "apps/web-ele"
+      "name": "@black-tonny/retail-admin",
+      "path": "apps/retail-admin"
     },
     {
       "name": "@vben/commitlint-config",

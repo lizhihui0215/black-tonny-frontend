@@ -1,57 +1,26 @@
 # Black Tonny Frontend
 
-Independent frontend workspace for the Black Tonny / 小黑托昵 retail dashboard.
+Frontend repository for the Black Tonny retail dashboard, built on `vue-vben-admin v5` with the current `retail-admin` application shell.
 
-Phase 1 uses `vue-vben-admin v5` with the `web-ele` application shell, but the business pages, payload loader, and sample-data workflow are now tailored to Black Tonny. The app runs fully from copied JSON samples inside this repository and does not depend on the sibling `Black-Tonny` repo at runtime.
+This repo owns the page layer, route structure, shared panels, theme preferences, and frontend-facing interaction model for the current dashboard experience.
 
-## Current Scope
+## Current Status
 
-- Independent repo at `~/Workspace/black-tonny-frontend`
-- `vue-vben-admin v5` `web-ele` shell
-- Five business pages:
+- Main business frontend lives in `apps/retail-admin`
+- Five business pages are currently exposed:
   - `/dashboard`
   - `/details`
   - `/monthly`
   - `/quarterly`
   - `/relationship`
-- Default home route set to `/dashboard`
-- No real login, no real permissions, no backend dependency in phase 1
-- Data loaded from local sample files under `apps/web-ele/public/data`
-
-## Stack
-
-- Vue 3
-- TypeScript
-- Vite
-- vue-vben-admin v5
-- Element Plus
-- Pinia
-- ECharts
-- pnpm workspace
-
-## Frontend Change Standard
-
-业务开发、样式调整、组件接入、依赖变更都先遵守当前仓库规范：
-
-- [前端改动规范](./docs/frontend-change-standard.md)
-
-重点约束：
-
-- 所有改动都基于 `vue-vben-admin v5` 底座。
-- 样式改动必须先检查现有 vben / Element Plus / Tailwind token / 业务页面模式。
-- `apps/web-ele/src/preferences.ts` 是全局主题与视觉偏好的入口，颜色和布局偏好不要脱离它散落到页面中。
-- 默认不要引入新的第三方库；如果必须新增，要先说明原因。
-
-团队协作固化：
-
-- 规范源始终是 `docs/frontend-change-standard.md`
-- Codex 项目入口在 `.codex/skills/black-tonny-frontend-standards`
-- Claude 项目入口在 `.claude/CLAUDE.md`
-- Gemini 项目入口在 `GEMINI.md`
-- Codex 用户可运行 `bash ./scripts/install-codex-skill.sh` 把仓库里的共享 skill 链接到本地 `$CODEX_HOME/skills`
-- 更新规则时先改规范源，再同步三个入口适配层
+- Main page payloads now load through the backend `GET /api/manifest` and `GET /api/pages/{page_key}` APIs
+- Dashboard summary uses the backend endpoint `GET /api/dashboard/summary`
+- A layout-level right-side AI assistant sidebar is available across the business pages and now uses the backend `POST /api/assistant/chat` path, with frontend fallback only for local unavailable-backend scenarios
+- Single-owner frontend login currently uses the documented centralized frontend mock owner flow, while `frontend access mode` remains the current access model
 
 ## Quick Start
+
+This repo pins the local Node runtime through [`.node-version`](./.node-version). An [`.nvmrc`](./.nvmrc) mirror is also provided for `nvm` users.
 
 ```bash
 corepack enable
@@ -62,95 +31,94 @@ pnpm dev
 
 Default local URL:
 
-```bash
+```text
 http://localhost:5777
 ```
 
-## Main Commands
+## Common Commands
 
 ```bash
 pnpm dev
+pnpm check:mainline
+pnpm check:runtime
 pnpm build
 pnpm typecheck
 pnpm sync:data
+pnpm test:e2e:dashboard
 ```
 
-## Data Sync
+## Documentation
 
-Phase 1 keeps a local copy of the dashboard payload samples so the frontend repo stays fully isolated.
+- [ARCHITECTURE.md](./ARCHITECTURE.md): runtime flow, page composition model, and frontend ownership boundaries
+- [docs/README.md](./docs/README.md): topic-level documentation index
+- [docs/document-map.md](./docs/document-map.md): cross-repository document map for product, implementation, and tooling navigation
+- [docs/product/README.md](./docs/product/README.md): product overview and solution-facing docs for customer communication
+- [docs/tooling/README.md](./docs/tooling/README.md): repo-local tooling docs for temp skills and AI-assisted workflows
+- [CONTRIBUTING.md](./CONTRIBUTING.md): contribution and documentation update rules
 
-Default source:
+## AI Entry Docs
 
-```bash
-../Black-Tonny/site/dashboard
-```
+- [AGENTS.md](./AGENTS.md): vendor-neutral AI entrypoint, precedence, and repo-wide documentation rules
+- [CLAUDE.md](./CLAUDE.md): Claude adapter for the shared AI entry standard
+- [GEMINI.md](./GEMINI.md): Gemini adapter for the shared AI entry standard
+- [.claude/CLAUDE.md](./.claude/CLAUDE.md): Claude compatibility shim that points to the root adapter
 
-The sync script copies:
+## Documentation Policy
 
-- `manifest.json`
-- `dashboard.json`
-- `details.json`
-- `monthly.json`
-- `quarterly.json`
-- `relationship.json`
-- available markdown and csv exports declared in `manifest.json`
+This repository uses a strict documentation language split:
 
-Custom source root:
+- public-facing standard docs must be written in English
+- internal working docs must be written in Chinese
 
-```bash
-BLACK_TONNY_SOURCE_ROOT=/absolute/path/to/Black-Tonny/site/dashboard pnpm sync:data
-```
+Public-facing standard docs include:
 
-## Project Structure
+- `README.md`
+- `ARCHITECTURE.md`
+- `docs/README.md`
+- `CONTRIBUTING.md`
+- `AGENTS.md`
+- `CLAUDE.md`
+- `GEMINI.md`
+- `.claude/CLAUDE.md`
+
+## Stack
+
+- Vue 3
+- TypeScript
+- Vite
+- `vue-vben-admin v5`
+- Element Plus
+- Pinia
+- ECharts
+- pnpm workspace
+
+## Repository Layout
 
 ```text
-apps/web-ele/src/
+apps/retail-admin/src/
+  adapter/
   api/
-    black-tonny.ts
   components/
-  types/black-tonny.ts
-  utils/black-tonny.ts
+  layouts/
+  router/
+  types/
+  utils/
   views/
-    dashboard/
-    details/
-    monthly/
-    quarterly/
-    relationship/
-    shared/
+tests/e2e/
+docs/
 scripts/
-  sync-black-tonny-data.mjs
+packages/
 ```
 
-## Phase 2 Frontend Model
+## Data Notes
 
-The current page layer has moved into a config-driven structure:
+- The current page shell is config-driven through `PageSpec + page-shell + shared components`, and `dashboard` now also re-enters through the same route-level shell
+- Repo-local page payload fixtures now live under `tests/e2e/fixtures/pages`, while the formal runtime page path goes through backend `manifest/pages` APIs
+- The dashboard summary and right-side assistant chat paths both expect the backend service for the full current experience
 
-- `PageSpec` defines each page's business goal, primary chart, summary priority, and core tables
-- `page-shell.vue` acts as the template executor
-- the shared components focus on rendering only
-- payload contracts remain unchanged
+## Related Repositories
 
-This keeps `dashboard -> details -> relationship -> monthly -> quarterly`
-optimizations consistent without creating five unrelated page systems.
+- [Optional sibling backend repo (local workspace link)](../black-tonny-backend)
+- [Optional sibling backend architecture doc (local workspace link)](../black-tonny-backend/ARCHITECTURE.md)
 
-## Phase 1 Rules
-
-- Keep business-facing page text in Simplified Chinese
-- Keep engineering identifiers and implementation code in English
-- Do not read files from the sibling repo at runtime
-- Do not move metric computation into the frontend
-- Treat missing blocks, empty arrays, and partial payloads as valid inputs
-- Show empty states instead of crashing when data is absent
-
-## Verification
-
-The current phase-1 baseline has already been verified with:
-
-- `pnpm install`
-- `pnpm typecheck`
-- `pnpm build`
-- local route checks for all five pages
-
-## Next Phase
-
-Phase 2 can replace the local payload loader with a real `FastAPI` adapter while keeping the page components and route structure unchanged.
+These sibling references are helpful when you use the split local workspace, but this frontend repo should remain readable on its own.

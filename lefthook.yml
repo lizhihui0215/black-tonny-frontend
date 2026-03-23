@@ -65,6 +65,11 @@ pre-commit:
       run: pnpm oxfmt {staged_files}
       glob: '{!(package)*.json,*.code-snippets,.!(browserslist)*rc}'
 
+pre-push:
+  commands:
+    check-mainline:
+      run: pnpm check:mainline
+
 post-merge:
   commands:
     install:

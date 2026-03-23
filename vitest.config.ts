@@ -15,6 +15,7 @@ export default defineConfig({
         },
       },
     },
+    setupFiles: ['./tests/setup-vitest.ts'],
     exclude: [
       ...configDefaults.exclude,
       '**/e2e/**',

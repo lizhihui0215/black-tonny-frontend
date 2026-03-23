@@ -1,14 +1,7 @@
-# Black Tonny Frontend
+# Black Tonny Frontend Gemini Adapter
 
-This file is the Gemini project entry for the `black-tonny-frontend` repository.
+This file is the Gemini-specific adapter for `black-tonny-frontend`.
 
-Read and follow the shared frontend standard first:
+Read [AGENTS.md](./AGENTS.md) first.
 
-@./docs/frontend-change-standard.md
-
-## Adapter Notes
-
-- This file is only an adapter layer for Gemini. Do not maintain a second copy of the project standard here.
-- If this file and `docs/frontend-change-standard.md` ever differ, the shared standard wins.
-- Primary business app: `apps/web-ele`
-- Useful commands: `pnpm dev`, `pnpm typecheck`, `pnpm build`, `pnpm sync:data`
+If this file conflicts with [AGENTS.md](./AGENTS.md) or the underlying frontend standard docs, those docs win.

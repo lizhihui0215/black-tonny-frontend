@@ -1,0 +1,52 @@
+name: Frontend Mainline
+
+on:
+  pull_request:
+    paths:
+      - 'apps/retail-admin/**'
+      - 'packages/**'
+      - 'internal/**'
+      - 'docs/**'
+      - 'scripts/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.node-version'
+      - '.nvmrc'
+      - 'lefthook.yml'
+      - '.forgejo/workflows/frontend-mainline.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/retail-admin/**'
+      - 'packages/**'
+      - 'internal/**'
+      - 'docs/**'
+      - 'scripts/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.node-version'
+      - '.nvmrc'
+      - 'lefthook.yml'
+      - '.forgejo/workflows/frontend-mainline.yml'
+  workflow_dispatch:
+
+env:
+  CI: true
+  TZ: Asia/Shanghai
+
+jobs:
+  mainline:
+    name: Frontend Mainline
+    # Adjust this label to match your Forgejo/Gitea self-hosted runner.
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node
+
+      - name: Run no-drift baseline
+        run: pnpm check:mainline

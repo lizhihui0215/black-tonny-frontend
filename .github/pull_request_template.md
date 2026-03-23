@@ -1,33 +1,41 @@
-## Description
+## Summary
 
-<!-- Please describe the change as necessary. If it's a feature or enhancement please be as detailed as possible. If it's a bug fix, please link the issue that it fixes or describe the bug in as much detail.
+Describe the change clearly and briefly.
 
- -->
+## Affected Source Of Truth
 
-<!-- You can also add additional context here -->
+List the main docs or contracts affected by this change.
 
-## Type of change
+- [ ] `README.md`
+- [ ] `ARCHITECTURE.md`
+- [ ] `docs/README.md`
+- [ ] `CONTRIBUTING.md`
+- [ ] `AGENTS.md`
+- [ ] topic docs under `docs/`
+- [ ] no source-of-truth document changed
 
-Please delete options that are not relevant.
+## Cross-Repo Impact
 
-- [ ] Bug fix (non-breaking change which fixes an issue)
-- [ ] New feature (non-breaking change which adds functionality)
-- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
-- [ ] This change requires a documentation update
-- [ ] Please, don't make changes to `pnpm-lock.yaml` unless you introduce a new test example.
+- [ ] No sibling-repo documentation update was needed
+- [ ] Related frontend docs were updated
+- [ ] Related backend docs were updated
 
-## Checklist
+## Verification
 
-> ℹ️ Check all checkboxes - this will indicate that you have done everything in accordance with the rules in [CONTRIBUTING](contributing.md).
+List the checks you ran and any checks you intentionally skipped.
 
-- [ ] If you introduce new functionality, document it. You can run documentation with `pnpm run docs:dev` command.
-- [ ] Run the tests with `pnpm test`.
-- [ ] Changes in changelog are generated from PR name. Please, make sure that it explains your changes in an understandable manner. Please, prefix changeset messages with `feat:`, `fix:`, `perf:`, `docs:`, or `chore:`.
-- [ ] My code follows the style guidelines of this project
-- [ ] I have performed a self-review of my own code
-- [ ] I have commented my code, particularly in hard-to-understand areas
-- [ ] I have made corresponding changes to the documentation
-- [ ] My changes generate no new warnings
-- [ ] I have added tests that prove my fix is effective or that my feature works
-- [ ] New and existing unit tests pass locally with my changes
-- [ ] Any dependent changes have been merged and published in downstream modules
+- [ ] `pnpm docs:check`
+- [ ] `pnpm typecheck`
+- [ ] other relevant verification was run
+- [ ] no code-path verification was needed because this change is doc-only
+
+## Architecture / Boundary / Contract Impact
+
+- [ ] no architecture, boundary, or contract change
+- [ ] frontend/backend boundary docs were updated
+- [ ] architecture docs were updated
+- [ ] API or data contract docs were updated
+
+## Notes
+
+Add any follow-up work, assumptions, or reviewer context here.

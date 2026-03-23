@@ -1,0 +1,234 @@
+{
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "codeLogin": "Code Login",
+    "qrcodeLogin": "Qr Code Login",
+    "forgetPassword": "Forget Password",
+    "profile": "Profile"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "analytics": "Analytics",
+    "workspace": "Workspace"
+  },
+  "common": {
+    "dateRange": {
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "last7Days": "Last 7 Days",
+      "last14Days": "Last 14 Days",
+      "last30Days": "Last 30 Days",
+      "last90Days": "Last 90 Days",
+      "thisMonth": "This Month",
+      "lastMonth": "Last Month",
+      "customRange": "Custom Range",
+      "manualSelection": "Manual Selection",
+      "selectedRange": "Selected Range",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "to": "to",
+      "cancel": "Cancel",
+      "apply": "Apply",
+      "reset": "Reset",
+      "rangeTitle": "Select Date Range",
+      "adjustView": "Adjust View Scope",
+      "rangeHint": "Switch the time range before reviewing the metrics and suggestions on this page.",
+      "daysView": "{count}-day view",
+      "days": "{count} days"
+    }
+  },
+  "dashboardView": {
+    "salesPurchase": "Sales & Purchase",
+    "overallInfo": "Overall Information",
+    "customerOverview": "Customers Overview",
+    "topProducts": "Top Selling Products",
+    "lowStockProducts": "Low Stock Products",
+    "recentSales": "Recent Sales",
+    "salesStatistics": "Sales Statistics",
+    "recentTransactions": "Recent Transactions",
+    "topCustomers": "Top Customers",
+    "topCategories": "Top Categories",
+    "orderHeatmap": "Order Statistics",
+    "today": "Today",
+    "weekly": "Weekly",
+    "viewAll": "View All",
+    "tableDate": "Date",
+    "tableCustomer": "Customer",
+    "tableStatus": "Status",
+    "tableAmount": "Amount",
+    "skuCode": "Code:",
+    "categoryStatistics": "Category Statistics",
+    "categoryCount": "Total Number Of Categories",
+    "productCount": "Total Number Of Products",
+    "salesVolume": "Sales",
+    "timeSlot": "Time",
+    "activityLevel": "Activity Level"
+  },
+  "dashboardSummary": {
+    "cards": {
+      "salesAmount": "Sales Amount",
+      "orderCount": "Order Count",
+      "avgOrderValue": "Average Order Value",
+      "salesQuantity": "Sales Quantity",
+      "attachRate": "Attach Rate",
+      "lowStockSkuCount": "Low Stock SKU Count",
+      "sizeBreakStyleCount": "Size Break Style Count",
+      "outOfSeasonStockQty": "Out-of-Season Stock Quantity"
+    },
+    "compare": {
+      "noChange": "No change vs previous period"
+    },
+    "status": {
+      "loading": "Syncing top summary metrics",
+      "unavailable": "Top summary metrics are unavailable"
+    }
+  },
+  "dashboardData": {
+    "greeting": {
+      "title": "Welcome back, Store Manager",
+      "subtitle": "There have been {count} orders today"
+    },
+    "alerts": {
+      "restockAction": "Restock Now",
+      "restockText": "Your iPhone 15 inventory is running low and has dropped below 5 units.",
+      "followUpAction": "Handle Now",
+      "followUpText": "The safety stock for the bestselling Type-C braided fast-charging cable is low. Please review it."
+    },
+    "analytics": {
+      "rangeDay": "1 Day",
+      "rangeWeek": "1 Week",
+      "rangeMonth": "1 Month",
+      "rangeQuarter": "3 Months",
+      "rangeHalfYear": "6 Months",
+      "rangeYear": "1 Year",
+      "purchaseVolume": "Purchase Volume",
+      "salesVolume": "Sales Volume",
+      "salesSeries": "Sales",
+      "purchaseSeries": "Purchases"
+    },
+    "categories": {
+      "electronics": "Electronics",
+      "outdoor": "Outdoor Sports",
+      "lifestyle": "Lifestyle",
+      "seasonal": "Seasonal Picks",
+      "fashionAccessories": "Fashion Accessories",
+      "bedding": "Home Bedding",
+      "toys": "Educational Toys",
+      "appliances": "Appliances",
+      "smartphones": "Smartphones"
+    },
+    "customerSegments": {
+      "firstTime": "First-Time Customers",
+      "repeat": "Returning Customers",
+      "inactive": "Inactive Customers",
+      "newCustomer": "New",
+      "repurchase": "Repeat"
+    },
+    "status": {
+      "inventory": "Stock",
+      "completed": "Completed",
+      "processing": "Processing",
+      "cancelled": "Cancelled",
+      "pending": "Pending",
+      "draft": "Draft"
+    },
+    "metrics": {
+      "grossSales": "Gross Sales",
+      "salesReturn": "Sales Returns",
+      "purchaseTotal": "Total Purchases",
+      "purchaseReturn": "Purchase Returns",
+      "profit": "Profit",
+      "receivable": "Accounts Receivable",
+      "totalExpense": "Total Expense",
+      "paymentReturn": "Payment Refunds",
+      "vsLastMonth": "vs Last Month",
+      "revenue": "Revenue",
+      "expense": "Expense"
+    },
+    "overview": {
+      "suppliers": "Suppliers",
+      "customers": "Customers",
+      "orders": "Orders"
+    },
+    "quickActions": {
+      "layoutDraft": "Layout Draft",
+      "exportPreview": "Export Preview",
+      "filters": "Filters",
+      "createAction": "Create Action"
+    },
+    "lowStockItems": {
+      "laptopTitle": "Dell Ultrabook",
+      "laptopWarehouse": "Main Warehouse A-08",
+      "robotTitle": "Robot Vacuum",
+      "robotWarehouse": "Main Warehouse A-11",
+      "mixerTitle": "Stand Mixer",
+      "mixerWarehouse": "Display Area B-02",
+      "jacketTitle": "Levi's Denim Jacket",
+      "jacketWarehouse": "Apparel Zone C-09",
+      "chipsTitle": "Lay's Original Chips",
+      "chipsWarehouse": "Snack Zone D-03"
+    },
+    "recentSales": {
+      "watchTitle": "Apple Watch Series 9",
+      "braceletTitle": "Gold Bracelet",
+      "duvetTitle": "Down Comforter",
+      "tumblerTitle": "Outdoor Tumbler",
+      "kitTitle": "Starter Kit"
+    },
+    "summaries": {
+      "topCategory": "This section is currently a placeholder for category structure and share, and can later be connected to real category distribution.",
+      "topCustomer": "This section currently uses a high-value customer list as a placeholder, making it easy to replace later with member segmentation and purchase frequency."
+    },
+    "topCustomers": {
+      "carlosName": "Carlos Curran",
+      "carlosLocation": "United States · 24 orders",
+      "stanName": "Stan Gunter",
+      "stanLocation": "United Arab Emirates · 22 orders",
+      "richardName": "Richard Wilson",
+      "richardLocation": "Germany · 14 orders",
+      "maryName": "Mary Bronson",
+      "maryLocation": "Belgium · 08 orders",
+      "annieName": "Annie Tremblay",
+      "annieLocation": "Greenland · 14 orders"
+    },
+    "topProducts": {
+      "chargerTitle": "Charging Cable",
+      "chargerSubtitle": "Lightning Connector",
+      "perfumeTitle": "YSL Perfume",
+      "perfumeSubtitle": "Eau de Parfum",
+      "airpodsTitle": "AirPods 2",
+      "airpodsSubtitle": "Audio",
+      "vacuumTitle": "Vacuum Cleaner",
+      "vacuumSubtitle": "Home Appliance",
+      "phoneTitle": "Samsung Flagship Phone",
+      "phoneSubtitle": "Smartphone"
+    },
+    "tabs": {
+      "sales": "Sales",
+      "purchase": "Purchases",
+      "quote": "Quotes",
+      "expense": "Expenses",
+      "invoice": "Invoices"
+    },
+    "transactions": {
+      "andreaCustomer": "Andrea Wheeler",
+      "timothyCustomer": "Timothy Sander",
+      "bonnieCustomer": "Bonnie Rodriguez",
+      "randyCustomer": "Randy McCree",
+      "dennisCustomer": "Dennis Anderson"
+    },
+    "time": {
+      "hourLabel": "{hour}:00",
+      "monthLabel": "{month}",
+      "monthDayLabel": "{month}/{day}",
+      "monday": "Mon",
+      "tuesday": "Tue",
+      "wednesday": "Wed",
+      "thursday": "Thu",
+      "friday": "Fri",
+      "saturday": "Sat",
+      "sunday": "Sun"
+    }
+  }
+}

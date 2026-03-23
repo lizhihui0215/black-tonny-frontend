@@ -1,14 +1,8 @@
-# default onwer
-* anncwb@126.com vince292007@gmail.com netfan@foxmail.com jinmao88@qq.com
+# Default owner
+* @lizhihui0215
 
-# vben core onwer
-/.github/ anncwb@126.com vince292007@gmail.com netfan@foxmail.com jinmao88@qq.com
-/.vscode/ anncwb@126.com vince292007@gmail.com netfan@foxmail.com jinmao88@qq.com
-/packages/ anncwb@126.com vince292007@gmail.com netfan@foxmail.com jinmao88@qq.com
-/packages/@core/ anncwb@126.com vince292007@gmail.com netfan@foxmail.com jinmao88@qq.com
-/internal/ anncwb@126.com vince292007@gmail.com netfan@foxmail.com jinmao88@qq.com
-/scripts/ anncwb@126.com vince292007@gmail.com netfan@foxmail.com jinmao88@qq.com
-
-# vben team onwer
-apps/ anncwb@126.com vince292007@gmail.com netfan@foxmail.com @vbenjs/team-v5 jinmao88@qq.com
-docs/ anncwb@126.com vince292007@gmail.com netfan@foxmail.com @vbenjs/team-v5 jinmao88@qq.com
+# Repository collaboration surfaces
+/.github/ @lizhihui0215
+/apps/ @lizhihui0215
+/docs/ @lizhihui0215
+/scripts/ @lizhihui0215

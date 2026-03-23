@@ -69,3 +69,8 @@ vite.config.ts.*
 !.codex/skills/black-tonny-frontend-standards/agents/openai.yaml
 skills-lock.json
 .playwright-cli
+playwright-report
+test-results
+output
+local-dashboard-*.png
+reference-dashboard*.png

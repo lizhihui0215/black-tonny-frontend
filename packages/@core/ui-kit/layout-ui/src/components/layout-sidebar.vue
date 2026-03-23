@@ -307,13 +307,13 @@ onUnmounted(() => {
   <aside
     ref="asideRef"
     :style="style"
-    class="fixed left-0 top-0 h-full transition-all duration-150"
+    class="vben-layout-sidebar fixed left-0 top-0 h-full transition-all duration-150"
     :class="theme"
     @mouseenter="handleMouseenter"
     @mouseleave="handleMouseleave"
   >
     <div
-      class="h-full"
+      class="vben-layout-sidebar__panel h-full"
       :class="[
         {
           'bg-sidebar-deep': isSidebarMixed,
@@ -326,7 +326,7 @@ onUnmounted(() => {
         v-if="!collapse && !isSidebarMixed && showFixedButton"
         v-model:expand-on-hover="expandOnHover"
       />
-      <div v-if="slots.logo" :style="headerStyle">
+      <div v-if="slots.logo" :style="headerStyle" class="vben-layout-sidebar__logo">
         <slot name="logo"></slot>
       </div>
       <VbenScrollbar :style="contentStyle" shadow shadow-border>
@@ -348,7 +348,7 @@ onUnmounted(() => {
         },
       ]"
       :style="extraStyle"
-      class="fixed top-0 h-full overflow-hidden border-r border-border bg-sidebar transition-all duration-200"
+      class="vben-layout-sidebar__extra fixed top-0 h-full overflow-hidden border-r border-border bg-sidebar transition-all duration-200"
     >
       <SidebarCollapseButton
         v-if="isSidebarMixed && expandOnHover"

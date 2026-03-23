@@ -1,0 +1,234 @@
+{
+  "auth": {
+    "login": "登录",
+    "register": "注册",
+    "codeLogin": "验证码登录",
+    "qrcodeLogin": "二维码登录",
+    "forgetPassword": "忘记密码",
+    "profile": "个人中心"
+  },
+  "dashboard": {
+    "title": "概览",
+    "analytics": "分析页",
+    "workspace": "工作台"
+  },
+  "common": {
+    "dateRange": {
+      "today": "今天",
+      "yesterday": "昨天",
+      "last7Days": "近 7 天",
+      "last14Days": "近 14 天",
+      "last30Days": "近 30 天",
+      "last90Days": "近 90 天",
+      "thisMonth": "本月",
+      "lastMonth": "上月",
+      "customRange": "自定义范围",
+      "manualSelection": "手动选择",
+      "selectedRange": "已选范围",
+      "startDate": "开始日期",
+      "endDate": "结束日期",
+      "to": "至",
+      "cancel": "取消",
+      "apply": "应用",
+      "reset": "恢复默认",
+      "rangeTitle": "选择时间范围",
+      "adjustView": "调整查看口径",
+      "rangeHint": "先切换时间范围，再看本页指标和动作建议。",
+      "daysView": "{count} 天视角",
+      "days": "{count} 天"
+    }
+  },
+  "dashboardView": {
+    "salesPurchase": "销售与采购",
+    "overallInfo": "整体信息",
+    "customerOverview": "顾客概览",
+    "topProducts": "热销商品",
+    "lowStockProducts": "低库存商品",
+    "recentSales": "近期销售",
+    "salesStatistics": "销售统计",
+    "recentTransactions": "近期交易",
+    "topCustomers": "核心顾客",
+    "topCategories": "热销品类",
+    "orderHeatmap": "订单热力",
+    "today": "今天",
+    "weekly": "本周",
+    "viewAll": "查看全部",
+    "tableDate": "日期",
+    "tableCustomer": "顾客",
+    "tableStatus": "状态",
+    "tableAmount": "金额",
+    "skuCode": "编号：",
+    "categoryStatistics": "品类统计",
+    "categoryCount": "品类总数",
+    "productCount": "商品总数",
+    "salesVolume": "销量",
+    "timeSlot": "时段",
+    "activityLevel": "活跃度"
+  },
+  "dashboardSummary": {
+    "cards": {
+      "salesAmount": "销售额",
+      "orderCount": "订单数",
+      "avgOrderValue": "客单价",
+      "salesQuantity": "销售件数",
+      "attachRate": "连带率",
+      "lowStockSkuCount": "低库存 SKU 数",
+      "sizeBreakStyleCount": "缺码款数",
+      "outOfSeasonStockQty": "过季库存件数"
+    },
+    "compare": {
+      "noChange": "较上期无变化"
+    },
+    "status": {
+      "loading": "正在同步顶部指标",
+      "unavailable": "顶部指标暂未获取"
+    }
+  },
+  "dashboardData": {
+    "greeting": {
+      "title": "欢迎回来，店长",
+      "subtitle": "今天已有 {count} 笔订单"
+    },
+    "alerts": {
+      "restockAction": "去补货",
+      "restockText": "你的商品 苹果手机 15 库存告急，已低于 5 件。",
+      "followUpAction": "去处理",
+      "followUpText": "热销款 Type-C 编织快充线的安全库存偏低，请关注。"
+    },
+    "analytics": {
+      "rangeDay": "1天",
+      "rangeWeek": "1周",
+      "rangeMonth": "1月",
+      "rangeQuarter": "3月",
+      "rangeHalfYear": "6月",
+      "rangeYear": "1年",
+      "purchaseVolume": "采购总量",
+      "salesVolume": "销售总量",
+      "salesSeries": "销售",
+      "purchaseSeries": "采购"
+    },
+    "categories": {
+      "electronics": "数码电子",
+      "outdoor": "运动户外",
+      "lifestyle": "生活方式",
+      "seasonal": "季节限定",
+      "fashionAccessories": "时尚配饰",
+      "bedding": "家居寝具",
+      "toys": "益智玩具",
+      "appliances": "家电",
+      "smartphones": "智能手机"
+    },
+    "customerSegments": {
+      "firstTime": "首次到店顾客",
+      "repeat": "回头客",
+      "inactive": "沉默顾客",
+      "newCustomer": "新客",
+      "repurchase": "复购"
+    },
+    "status": {
+      "inventory": "库存",
+      "completed": "已完成",
+      "processing": "处理中",
+      "cancelled": "已取消",
+      "pending": "挂起",
+      "draft": "草稿"
+    },
+    "metrics": {
+      "grossSales": "销售总额",
+      "salesReturn": "销售退货",
+      "purchaseTotal": "采购总额",
+      "purchaseReturn": "采购退货",
+      "profit": "利润",
+      "receivable": "待收账款",
+      "totalExpense": "总支出",
+      "paymentReturn": "付款退回",
+      "vsLastMonth": "较上月",
+      "revenue": "收入",
+      "expense": "支出"
+    },
+    "overview": {
+      "suppliers": "供应商",
+      "customers": "顾客",
+      "orders": "订单"
+    },
+    "quickActions": {
+      "layoutDraft": "布局草稿",
+      "exportPreview": "导出预览",
+      "filters": "筛选条件",
+      "createAction": "新增动作"
+    },
+    "lowStockItems": {
+      "laptopTitle": "戴尔轻薄本",
+      "laptopWarehouse": "主仓 A-08",
+      "robotTitle": "扫地机器人",
+      "robotWarehouse": "主仓 A-11",
+      "mixerTitle": "厨师机",
+      "mixerWarehouse": "展示区 B-02",
+      "jacketTitle": "李维斯牛仔夹克",
+      "jacketWarehouse": "服饰区 C-09",
+      "chipsTitle": "乐事原味薯片",
+      "chipsWarehouse": "零食区 D-03"
+    },
+    "recentSales": {
+      "watchTitle": "苹果手表 9 代",
+      "braceletTitle": "金手链",
+      "duvetTitle": "羽绒被",
+      "tumblerTitle": "户外保温杯",
+      "kitTitle": "启蒙套装"
+    },
+    "summaries": {
+      "topCategory": "本模块先占位类别结构和占比，后续可切到真实品类分布。",
+      "topCustomer": "先用高净值客户列表占位，方便后面替换成会员分层和消费频次。"
+    },
+    "topCustomers": {
+      "carlosName": "卡洛斯·库兰",
+      "carlosLocation": "美国 · 24单",
+      "stanName": "斯坦·冈特",
+      "stanLocation": "阿联酋 · 22单",
+      "richardName": "理查德·威尔逊",
+      "richardLocation": "德国 · 14单",
+      "maryName": "玛丽·布朗森",
+      "maryLocation": "比利时 · 08单",
+      "annieName": "安妮·特朗布莱",
+      "annieLocation": "格陵兰 · 14单"
+    },
+    "topProducts": {
+      "chargerTitle": "充电线",
+      "chargerSubtitle": "闪电接口",
+      "perfumeTitle": "圣罗兰",
+      "perfumeSubtitle": "淡香精",
+      "airpodsTitle": "苹果耳机 2 代",
+      "airpodsSubtitle": "音频",
+      "vacuumTitle": "吸尘器",
+      "vacuumSubtitle": "家电",
+      "phoneTitle": "三星旗舰手机",
+      "phoneSubtitle": "智能手机"
+    },
+    "tabs": {
+      "sales": "销售",
+      "purchase": "采购",
+      "quote": "报价",
+      "expense": "支出",
+      "invoice": "发票"
+    },
+    "transactions": {
+      "andreaCustomer": "安德烈娅·威勒",
+      "timothyCustomer": "蒂莫西·桑德",
+      "bonnieCustomer": "邦妮·罗德里格斯",
+      "randyCustomer": "兰迪·麦克里",
+      "dennisCustomer": "丹尼斯·安德森"
+    },
+    "time": {
+      "hourLabel": "{hour}时",
+      "monthLabel": "{month}月",
+      "monthDayLabel": "{month}月{day}日",
+      "monday": "周一",
+      "tuesday": "周二",
+      "wednesday": "周三",
+      "thursday": "周四",
+      "friday": "周五",
+      "saturday": "周六",
+      "sunday": "周日"
+    }
+  }
+}

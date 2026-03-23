@@ -4,7 +4,7 @@ import process from 'node:process';
 
 const targetRoot = path.resolve(
   process.cwd(),
-  'apps/web-ele/public',
+  'apps/retail-admin/public',
 );
 const sourceRoot = process.env.BLACK_TONNY_SOURCE_ROOT
   ? path.resolve(process.env.BLACK_TONNY_SOURCE_ROOT)
