@@ -56,6 +56,8 @@
 - `dashboard-e2e.yml` 是 runtime 护栏，跑 `pnpm test:e2e:dashboard`
 - 如果后续需要进一步控成本，可以只保留 `frontend-mainline.yml` 常开，把 `dashboard-e2e.yml` 改成手动或路径更窄的触发
 - 当前仓库已移除 upstream 模板里那些不再服务本仓的 GitHub workflow，只保留这两条 repo-owned 主线，避免 Actions 页面持续堆积无效自动化噪音
+- 当前仓库的 Dependabot 只保留 `npm` 生态，并固定为 `weekly + open-pull-requests-limit: 2 + semver-major ignore`
+- `github-actions` 生态更新不再由 Dependabot 自动发 PR，因为当前仓库只保留少量 repo-owned workflow，继续自动更新这部分通常只会带来噪音而不是稳定收益
 
 ### 2.2 单机本地替代方案：`GitHub self-hosted runner`
 
