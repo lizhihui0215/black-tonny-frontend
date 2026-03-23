@@ -35,7 +35,7 @@
 
 - [overview.md](./overview.md)
 - [summary-metrics.md](./summary-metrics.md)
-- [summary-api.md（backend workspace 链接）](../../../black-tonny-backend/docs/dashboard/summary-api.md)
+- [summary-api.md（backend GitHub 链接）](https://github.com/lizhihui0215/black-tonny-backend/blob/main/docs/dashboard/summary-api.md)
 - [interaction-rules.md](./interaction-rules.md)
 
 ## 四、接口输出

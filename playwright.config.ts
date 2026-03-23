@@ -22,8 +22,11 @@ export default defineConfig({
       'pnpm --filter @black-tonny/retail-admin run build && pnpm --filter @black-tonny/retail-admin exec vite preview --host 127.0.0.1 --port 4173',
     env: {
       ...process.env,
+      VITE_APP_NAMESPACE: 'black-tonny-retail-admin',
+      VITE_APP_TITLE: 'Black Tonny Retail Admin',
       VITE_ARCHIVER: 'false',
       VITE_GLOB_API_URL: '',
+      VITE_BASE: '/',
       VITE_E2E_BYPASS_CAPTCHA: 'true',
       VITE_ROUTER_HISTORY: 'history',
     },

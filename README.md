@@ -118,7 +118,7 @@ packages/
 
 ## Related Repositories
 
-- [Optional sibling backend repo (local workspace link)](../black-tonny-backend)
-- [Optional sibling backend architecture doc (local workspace link)](../black-tonny-backend/ARCHITECTURE.md)
+- [Sibling backend repository](https://github.com/lizhihui0215/black-tonny-backend)
+- [Sibling backend architecture doc](https://github.com/lizhihui0215/black-tonny-backend/blob/main/ARCHITECTURE.md)
 
-These sibling references are helpful when you use the split local workspace, but this frontend repo should remain readable on its own.
+These sibling references should stay readable on GitHub even when the frontend repo is viewed on its own.

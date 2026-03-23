@@ -53,10 +53,10 @@
 
 ### 2.3 想理解数据底座与 capture
 
-1. [Optional sibling backend ERP 文档入口 (local workspace link)](../../black-tonny-backend/docs/erp/README.md)
-2. [Optional sibling backend ERP API 成熟度总览 (local workspace link)](../../black-tonny-backend/docs/erp/api-maturity-board.md)
-3. [Optional sibling backend Capture 路线注册表 (local workspace link)](../../black-tonny-backend/docs/erp/capture-route-registry.md)
-4. [Optional sibling backend Capture 全量导入路线图 (local workspace link)](../../black-tonny-backend/docs/erp/capture-ingestion-roadmap.md)
+1. [Sibling backend ERP 文档入口](https://github.com/lizhihui0215/black-tonny-backend/blob/main/docs/erp/README.md)
+2. [Sibling backend ERP API 成熟度总览](https://github.com/lizhihui0215/black-tonny-backend/blob/main/docs/erp/api-maturity-board.md)
+3. [Sibling backend Capture 路线注册表](https://github.com/lizhihui0215/black-tonny-backend/blob/main/docs/erp/capture-route-registry.md)
+4. [Sibling backend Capture 全量导入路线图](https://github.com/lizhihui0215/black-tonny-backend/blob/main/docs/erp/capture-ingestion-roadmap.md)
 
 ### 2.4 想看工具、MCP 或浏览器研究
 
@@ -66,9 +66,9 @@
    - [skills 使用说明](./tooling/skills-guide.md)
    - [AI 协作说明](./tooling/ai-collaboration-guide.md)
 2. 如果任务涉及 MCP、browser research、页面研究 runner、菜单覆盖审计，再看 backend：
-   - [Optional sibling backend tooling 文档入口 (local workspace link)](../../black-tonny-backend/docs/tooling/README.md)
-   - [Optional sibling backend MCP 使用说明 (local workspace link)](../../black-tonny-backend/docs/tooling/mcp-guide.md)
-   - [Optional sibling backend 浏览器研究工具说明 (local workspace link)](../../black-tonny-backend/docs/tooling/browser-research-tools.md)
+   - [Sibling backend tooling 文档入口](https://github.com/lizhihui0215/black-tonny-backend/blob/main/docs/tooling/README.md)
+   - [Sibling backend MCP 使用说明](https://github.com/lizhihui0215/black-tonny-backend/blob/main/docs/tooling/mcp-guide.md)
+   - [Sibling backend 浏览器研究工具说明](https://github.com/lizhihui0215/black-tonny-backend/blob/main/docs/tooling/browser-research-tools.md)
 
 ### 2.5 想做升级、发布或长期维护决策
 

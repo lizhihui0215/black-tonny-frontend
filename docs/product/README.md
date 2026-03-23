@@ -35,8 +35,8 @@
 
 当前最重要的 backend 入口是：
 
-- [Optional sibling backend ERP maturity board (local workspace link)](../../../black-tonny-backend/docs/erp/api-maturity-board.md)
-- [Optional sibling backend capture route registry (local workspace link)](../../../black-tonny-backend/docs/erp/capture-route-registry.md)
+- [Sibling backend ERP maturity board](https://github.com/lizhihui0215/black-tonny-backend/blob/main/docs/erp/api-maturity-board.md)
+- [Sibling backend capture route registry](https://github.com/lizhihui0215/black-tonny-backend/blob/main/docs/erp/capture-route-registry.md)
 
 ## 3. 延伸阅读
 
@@ -44,4 +44,4 @@
 - [Frontend Docs Index](../README.md)
 - [dashboard 产品总览](../dashboard/overview.md)
 - [dashboard 指标定义](../dashboard/summary-metrics.md)
-- [Optional sibling backend ERP maturity board (local workspace link)](../../../black-tonny-backend/docs/erp/api-maturity-board.md)
+- [Sibling backend ERP maturity board](https://github.com/lizhihui0215/black-tonny-backend/blob/main/docs/erp/api-maturity-board.md)

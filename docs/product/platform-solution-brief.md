@@ -142,5 +142,5 @@
 - [文档总图](../document-map.md)
 - [平台总体介绍](./platform-overview.md)
 - [Frontend Docs Index](../README.md)
-- [Optional sibling backend ERP maturity board (local workspace link)](../../../black-tonny-backend/docs/erp/api-maturity-board.md)
-- [Optional sibling backend capture route registry (local workspace link)](../../../black-tonny-backend/docs/erp/capture-route-registry.md)
+- [Sibling backend ERP maturity board](https://github.com/lizhihui0215/black-tonny-backend/blob/main/docs/erp/api-maturity-board.md)
+- [Sibling backend capture route registry](https://github.com/lizhihui0215/black-tonny-backend/blob/main/docs/erp/capture-route-registry.md)

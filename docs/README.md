@@ -153,7 +153,7 @@ Recommended reading order:
    - Status: `Source of truth`
 2. [`dashboard/summary-metrics.md`](./dashboard/summary-metrics.md) - Dashboard summary metric definitions. Current language: Chinese.
    - Status: `Source of truth`
-3. [Optional sibling backend `summary-api.md` (local workspace link)](../../black-tonny-backend/docs/dashboard/summary-api.md) - Backend contract for `GET /api/dashboard/summary`. Current language: Chinese.
+3. [Sibling backend `summary-api.md`](https://github.com/lizhihui0215/black-tonny-backend/blob/main/docs/dashboard/summary-api.md) - Backend contract for `GET /api/dashboard/summary`. Current language: Chinese.
    - Status: `Source of truth`
 4. [`dashboard/interaction-rules.md`](./dashboard/interaction-rules.md) - Dashboard interaction and linkage rules. Current language: Chinese.
    - Status: `Source of truth`
@@ -169,7 +169,7 @@ Supporting internal doc:
 
 ## Related Sibling-Repo Docs
 
-- [Optional sibling backend architecture (local workspace link)](../../black-tonny-backend/ARCHITECTURE.md)
-- [Optional sibling frontend/backend boundary note (local workspace link)](../../black-tonny-backend/docs/frontend-backend-boundary.md)
+- [Sibling backend architecture](https://github.com/lizhihui0215/black-tonny-backend/blob/main/ARCHITECTURE.md)
+- [Sibling frontend/backend boundary note](https://github.com/lizhihui0215/black-tonny-backend/blob/main/docs/frontend-backend-boundary.md)
   - Current language: Chinese collaboration doc
   - Status: `Working doc`

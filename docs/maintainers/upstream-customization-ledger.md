@@ -1,6 +1,6 @@
 # Upstream 定制台账
 
-这份文档是 `black-tonny-frontend` 针对本地官方 clone [vue-vben-admin](../../../../vue-vben-admin) 的文件级定制台账。
+这份文档是 `black-tonny-frontend` 针对官方仓 [vue-vben-admin](https://github.com/vbenjs/vue-vben-admin/tree/3528517fe) 的文件级定制台账。
 
 它只关心一类问题：
 
@@ -14,7 +14,7 @@
 
 当前对照基线：
 
-- 本地官方 clone：[vue-vben-admin](../../../../vue-vben-admin)
+- 官方仓基线：[vue-vben-admin](https://github.com/vbenjs/vue-vben-admin/tree/3528517fe)
 - 分支：`main`
 - 快照提交：`3528517fe`
 - 审计日期：`2026-03-23`

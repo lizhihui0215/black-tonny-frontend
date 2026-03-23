@@ -62,7 +62,7 @@
 - repo-local page payload fixture 已迁出 `apps/retail-admin/public/data`，统一收敛到 `tests/e2e/fixtures/pages`
 - repo root 的调试截图素材已从版本管理中清理，并改由 `.gitignore` 约束
 - 仓库已新增 `pnpm standards:check`，用于自动拦截 app runtime mock 回流、fixture 归位漂移、共享层品牌泄漏和调试素材误入版本管理
-- 已与本地官方 clone [vue-vben-admin](../../../vue-vben-admin) 的 `main@3528517fe` 做骨架对照；`packages/*` 与 `internal/*` 源码骨架保持贴近 upstream，repo-owned additions 继续集中在 `docs/`、`tests/`、AI 入口与 `.forgejo/`
+- 已与官方仓 [vue-vben-admin](https://github.com/vbenjs/vue-vben-admin/tree/3528517fe) 的 `main@3528517fe` 做骨架对照；`packages/*` 与 `internal/*` 源码骨架保持贴近 upstream，repo-owned additions 继续集中在 `docs/`、`tests/`、AI 入口与 `.forgejo/`
 - 原先缺少维护说明的 `Role-scoped gap`，已通过 `docs/maintainers/*` 收口
 
 ## Current Board
@@ -80,7 +80,7 @@
 | A9 | Dashboard runtime mock removal | `apps/retail-admin` | `Mandatory drift` | `Resolved` | `dashboard` 下半部分已并回正式 payload-driven shared sections，runtime 不再依赖 `dashboard.mock.ts` |
 | A10 | Fixture placement | repo root + `apps/retail-admin` | `Mandatory drift` | `Resolved` | page payload fixture 已迁到 `tests/e2e/fixtures/pages`，app runtime `public/` 不再承担样本页面数据归宿 |
 | A11 | Repo-root debug assets | repo root | `Mandatory drift` | `Resolved` | `local-dashboard-*.png`、`reference-dashboard*.png` 与 `output/playwright` 产物已从版本管理中清理，并通过 `.gitignore` 和 `standards:check` 模式规则约束 |
-| A12 | Upstream clone cross-check | repo root + `packages/*` + `internal/*` | `Reference-only` | `Aligned` | 已对照本地 [vue-vben-admin](../../../vue-vben-admin) `main@3528517fe`；共享层骨架保持贴近 upstream，文件级差异已沉淀到 [Upstream 定制台账](./maintainers/upstream-customization-ledger.md) |
+| A12 | Upstream clone cross-check | repo root + `packages/*` + `internal/*` | `Reference-only` | `Aligned` | 已对照官方仓 [vue-vben-admin](https://github.com/vbenjs/vue-vben-admin/tree/3528517fe) `main@3528517fe`；共享层骨架保持贴近 upstream，文件级差异已沉淀到 [Upstream 定制台账](./maintainers/upstream-customization-ledger.md) |
 
 ## Findings
 
@@ -232,7 +232,7 @@
 当前状态：
 
 - 已有文件级台账记录 `packages/*` 与 `internal/*` 的允许定制 diff
-- 仓库提供 `pnpm upstream:check`，用于对照本地 [vue-vben-admin](../../../vue-vben-admin) `main@3528517fe`
+- 仓库提供 `pnpm upstream:check`，用于对照官方仓 [vue-vben-admin](https://github.com/vbenjs/vue-vben-admin/tree/3528517fe) `main@3528517fe`
 - 当前共享层只允许 3 处稳定语义挂点定制继续存在，其余新增 diff 会被 guardrail 拦住
 
 审计结论：
@@ -243,7 +243,7 @@
 
 当前位置：
 
-- [本地官方 clone: `vue-vben-admin`](../../../vue-vben-admin)
+- [官方仓基线: `vue-vben-admin`](https://github.com/vbenjs/vue-vben-admin/tree/3528517fe)
 - [packages/](../packages/)
 - [internal/](../internal/)
 

@@ -12,7 +12,7 @@
 - [summary-metrics.md](./summary-metrics.md) 负责顶部 8 张卡的业务口径
 - [interaction-rules.md](./interaction-rules.md) 负责日期联动与前后端职责边界
 - [summary-analysis-logic.md](./summary-analysis-logic.md) 负责指标之间的经营解释
-- backend [summary-api.md（workspace 链接）](../../../black-tonny-backend/docs/dashboard/summary-api.md) 负责 `/api/dashboard/summary` 的接口契约
+- backend [summary-api.md（GitHub 链接）](https://github.com/lizhihui0215/black-tonny-backend/blob/main/docs/dashboard/summary-api.md) 负责 `/api/dashboard/summary` 的接口契约
 
 本文件只回答 3 个问题：
 
@@ -197,7 +197,7 @@ Dashboard 顶部 8 张卡当前已经不再依赖 DreamsPOS 风格的 mock 语�
 
 ### 后端接口契约
 
-- [summary-api.md（backend workspace 链接）](../../../black-tonny-backend/docs/dashboard/summary-api.md)
+- [summary-api.md（backend GitHub 链接）](https://github.com/lizhihui0215/black-tonny-backend/blob/main/docs/dashboard/summary-api.md)
   - 负责 `/api/dashboard/summary` 的参数、返回结构、字段说明和示例响应
 
 ### 本文档
