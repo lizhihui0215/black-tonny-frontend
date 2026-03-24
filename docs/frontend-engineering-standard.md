@@ -60,7 +60,8 @@
 - 路由仍走 `apps/retail-admin/src/router/routes/modules/*`
 - 标准请求能力仍保留在 `apps/retail-admin/src/api/request.ts`
 - 页面组合主链路仍然是 `PageSpec + page-shell + shared components`
-- 当前单店主登录仍使用集中式 frontend mock owner provider，并通过 guard/access store 完成 access bootstrap；这是当前仓库的正式允许模式，不再视为例外
+- 当前正式 auth 主线已经回到 sibling backend `/api/auth/*` 与 `/api/user/info`，并继续通过 guard/access store 完成 access bootstrap；`apps/backend-mock` 只保留为 dev/test fallback
+- 按 `vben` 底座本身，`apps/backend-mock` 作为集成开发能力存在是正常做法；当前需要持续收正的不是“要不要有 backend-mock”，而是它返回的 API 形式必须对齐 sibling backend
 - 工程工具链仍建立在 `@vben/*`、`packages/effects/*`、`internal/*` 和 Tailwind v4 之上
 
 ## Mandatory Rules
@@ -125,7 +126,8 @@
 - 不单独维护一份和路由平行、长期脱节的菜单配置
 - 不绕开现有 router 模块目录，直接把大型业务路由散落到页面组件内部
 - 页面可见性、菜单结构、权限控制，优先沿用 router + `meta` + access store 模型
-- 当前登录与 access bootstrap 必须继续沿用现有 guard/access store 链路，且开发态 mock 登录必须通过 `apps/backend-mock` 提供的正式 `/auth/*`、`/user/info` 路径进入
+- 当前登录与 access bootstrap 必须继续沿用现有 guard/access store 链路，正式运行主线默认走 sibling backend `/api/auth/*` 与 `/api/user/info`
+- 若为本地单仓开发或 E2E 保留 mock 登录，必须通过 `apps/backend-mock` 提供同一路径的 fallback 实现进入
 
 禁止：
 
@@ -141,18 +143,22 @@
 
 - 正式运行时数据路径：走 `/api/*`，统一使用 `requestClient`
 - repo-local sample / fixture 路径：正式业务样本只允许放在 `apps/backend-mock/fixtures/*` 或 `docs/*` 的样本区，不应再由前端页面直接读取
+- repo-local 导出样本同样只允许放在 `apps/backend-mock/fixtures/exports/*`，并通过 `apps/backend-mock` 路由提供 `/exports/<file>` fallback
 - 如果 backend 还没落地而 frontend 需要先推进，必须先按 [Backend Mock 标准](./backend-mock-standard.md) 在 `apps/backend-mock` 落 mock route 和 fixture，再推进页面消费
 
 必须遵守：
 
 - 新增正式后端接口时，优先复用 `requestClient`
 - 接口鉴权、错误处理、多语言头、刷新 token 等公共行为继续走 `@vben/request` 链路
+- `apps/backend-mock` 作为 `vben` 风格的集成 mock 能力本身不视为偏离，默认启用也不算 drift
 - 页面运行时不要再直接 `fetch public/data/*`
+- 页面运行时不要再依赖 `apps/retail-admin/public/exports/*` 这类 app `public/` 样本目录
 - 页面运行时不要再依赖 page-level 业务 `*.mock.ts` builder 组装正式内容
 - 正式 `/api/*` 默认遵循 `vben` 可直接消费的 `{ code, data, message }`
-- 当前开发态登录 mock 只服务于本地 owner 体验，并且必须由 `apps/backend-mock` 提供，不得再回到 guard、页面或 frontend-local auth provider
+- 当前开发态登录 mock 只服务于本地 owner 体验与单仓 fallback，并且必须由 `apps/backend-mock` 提供，不得再回到 guard、页面或 frontend-local auth provider
 - 接口契约变化要同步更新前后端边界文档
 - 前端先行 mock 的正式业务接口，必须把 mock route、fixture 与 helper 收敛到 `apps/backend-mock/*`
+- `apps/backend-mock` 中的 path、method、query/body 字段、HTTP status、业务码和 message 文案，都必须优先向 sibling backend 的真实 API 形式靠拢
 
 禁止：
 
@@ -161,6 +167,9 @@
 - 为单个接口加“临时裸响应特例”后长期不回收
 - 让 `tests/e2e` 里的 mock path、request 字段或 response shape 脱离正式 runtime 请求实现各写一版
 - 在 `apps/retail-admin/src/api/contracts/*` 或 `apps/retail-admin/src/api/core/mock-auth.ts` 再维护一套 mock 契约层
+- 把 `apps/backend-mock` 本身误判成需要清理的偏移，再去绕开 `vben` 集成 mock 能力重造一套本地假服务
+- 让 `apps/retail-admin/public/exports/*` 回流为 tracked 样本目录
+- 在 `src/router/routes/modules/*` 保留空的占位 route module
 
 ### 6. Page Architecture And Composition
 

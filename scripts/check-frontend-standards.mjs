@@ -5,6 +5,10 @@ import { execFileSync } from 'node:child_process';
 const repoRoot = path.resolve(import.meta.dirname, '..');
 const appSrc = path.join(repoRoot, 'apps/retail-admin/src');
 const backendMockDir = path.join(repoRoot, 'apps/backend-mock');
+const appPublicExportsDir = path.join(repoRoot, 'apps/retail-admin/public/exports');
+const backendMockExportFixtureDir = path.join(repoRoot, 'apps/backend-mock/fixtures/exports');
+const backendMockExportRoutePath = path.join(repoRoot, 'apps/backend-mock/routes/exports/[fileName].ts');
+const routeModulesDir = path.join(appSrc, 'router/routes/modules');
 const packagesDir = path.join(repoRoot, 'packages');
 const internalDir = path.join(repoRoot, 'internal');
 const fixtureDir = path.join(repoRoot, 'apps/backend-mock/fixtures/pages');
@@ -118,6 +122,10 @@ if (fs.existsSync(path.join(repoRoot, 'apps/retail-admin/public/data'))) {
   addFailure('`apps/retail-admin/public/data` must not exist; move page fixtures to `apps/backend-mock/fixtures/pages`.');
 }
 
+if (fs.existsSync(appPublicExportsDir)) {
+  addFailure('`apps/retail-admin/public/exports` must not exist; export samples belong in `apps/backend-mock/fixtures/exports`.');
+}
+
 if (!fs.existsSync(backendMockDir)) {
   addFailure('`apps/backend-mock` is required for official-style repo-local mock routes.');
 }
@@ -141,6 +149,14 @@ if (!fs.existsSync(fixtureDir)) {
   if (!fs.existsSync(fixtureManifest)) {
     addFailure('`apps/backend-mock/fixtures/pages/manifest.json` is missing.');
   }
+}
+
+if (!fs.existsSync(backendMockExportFixtureDir)) {
+  addFailure('`apps/backend-mock/fixtures/exports` is required for repo-local export fixtures.');
+}
+
+if (!fs.existsSync(backendMockExportRoutePath)) {
+  addFailure('`apps/backend-mock/routes/exports/[fileName].ts` is required to serve repo-local export fixtures.');
 }
 
 const dashboardMockPath = path.join(appSrc, 'views/dashboard/dashboard.mock.ts');
@@ -202,6 +218,25 @@ const appMockFiles = walk(
 );
 for (const filePath of appMockFiles) {
   addFailure(`${toRepoPath(filePath)}: runtime app mock files are not allowed under apps/retail-admin/src.`);
+}
+
+const emptyRouteModuleSignature =
+  'import type { RouteRecordRaw } from \'vue-router\'; const routes: RouteRecordRaw[] = []; export default routes;';
+const routeModuleFiles = walk(
+  routeModulesDir,
+  (filePath) => /\.ts$/.test(filePath),
+);
+for (const filePath of routeModuleFiles) {
+  const repoPath = toRepoPath(filePath);
+  const normalizedSource = read(filePath).replace(/\s+/g, ' ').trim();
+
+  if (
+    repoPath.endsWith('/demos.ts') ||
+    repoPath.endsWith('/vben.ts') ||
+    normalizedSource === emptyRouteModuleSignature
+  ) {
+    addFailure(`${repoPath}: empty route placeholder modules are not allowed under router/routes/modules.`);
+  }
 }
 
 const sharedFiles = [

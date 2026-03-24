@@ -9,7 +9,7 @@ import type {
 } from '../../retail-admin/src/types/black-tonny';
 
 import { existsSync, readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { extname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 export const BLACK_TONNY_MOCK_API_PATHS = {
@@ -20,7 +20,23 @@ export const BLACK_TONNY_MOCK_API_PATHS = {
 } as const;
 
 const FIXTURE_ANCHOR = new Date(2026, 2, 22);
-const pagesRoot = fileURLToPath(new URL('../fixtures/pages', import.meta.url));
+const EXPORT_CONTENT_TYPES: Record<string, string> = {
+  '.csv': 'text/csv; charset=utf-8',
+  '.md': 'text/markdown; charset=utf-8',
+};
+
+function resolveFixtureRoot(kind: 'exports' | 'pages') {
+  const candidates = [
+    fileURLToPath(new URL(`../fixtures/${kind}`, import.meta.url)),
+    resolve(process.cwd(), 'apps/backend-mock', 'fixtures', kind),
+    resolve(process.cwd(), 'fixtures', kind),
+  ];
+
+  return candidates.find((candidate) => existsSync(candidate)) ?? candidates[0];
+}
+
+const pagesRoot = resolveFixtureRoot('pages');
+const exportsRoot = resolveFixtureRoot('exports');
 
 const SUMMARY_BY_PRESET: Record<
   Exclude<DashboardSummaryPreset, 'custom'>,
@@ -475,6 +491,31 @@ export function readPagePayload(pageKey: string): BlackTonnyPayload | null {
   }
 
   return JSON.parse(readFileSync(absolutePath, 'utf8')) as BlackTonnyPayload;
+}
+
+export function readExportFixture(fileName: string) {
+  const safeFileName = decodeURIComponent(fileName).trim();
+
+  if (
+    !safeFileName ||
+    safeFileName.includes('..') ||
+    /[\\/]/u.test(safeFileName)
+  ) {
+    return null;
+  }
+
+  const absolutePath = resolve(exportsRoot, safeFileName);
+  if (!existsSync(absolutePath)) {
+    return null;
+  }
+
+  return {
+    content: readFileSync(absolutePath, 'utf8'),
+    contentType:
+      EXPORT_CONTENT_TYPES[extname(safeFileName).toLowerCase()] ??
+      'text/plain; charset=utf-8',
+    fileName: safeFileName,
+  };
 }
 
 export function createAssistantChatSuccessFixture(

@@ -60,11 +60,14 @@
 - 当前没有仍然打开的 `Registered exception`
 - `dashboard` 下半部分已经回到正式 payload-driven shared sections，不再依赖 runtime page-level mock builder
 - repo-owned page payload fixture 已迁出 `apps/retail-admin/public/data`，统一收敛到 `apps/backend-mock/fixtures/pages`
+- repo-owned 导出样本已迁出 `apps/retail-admin/public/exports`，统一收敛到 `apps/backend-mock/fixtures/exports`
 - 正式 `/api/*` 的 frontend 先行 mock 已收敛到 `backend-mock` 模式：mock route、fixture 与 helper 统一经 `apps/backend-mock/*` 暴露，E2E mock 直接复用同一套 helper 与正式路径
+- 按 `vben` 底座，`apps/backend-mock` 作为集成开发能力存在本身不构成 drift；当前持续对齐点是它的 API 形式必须贴近 sibling backend
 - repo root 的调试截图素材已从版本管理中清理，并改由 `.gitignore` 约束
 - 仓库已新增 `pnpm standards:check`，用于自动拦截 app runtime mock 回流、fixture 归位漂移、共享层品牌泄漏和调试素材误入版本管理
 - 已与官方仓 [vue-vben-admin](https://github.com/vbenjs/vue-vben-admin/tree/3528517fe) 的 `main@3528517fe` 做骨架对照；`packages/*` 与 `internal/*` 源码骨架保持贴近 upstream，repo-owned additions 继续集中在 `docs/`、`tests/`、AI 入口与 `.forgejo/`
 - 原先缺少维护说明的 `Role-scoped gap`，已通过 `docs/maintainers/*` 收口
+- `router/routes/modules` 下的空占位模块已清理，不再保留无效 route file
 
 ## Current Board
 
@@ -74,7 +77,7 @@
 | A2 | Layout structure coupling | `apps/retail-admin` + shared layout | `Mandatory drift` | `Resolved` | layout/sidebar 的高风险结构选择器与全局 DOM 查询已收敛 |
 | A3 | Page composition | `apps/retail-admin` | `Registered exception` | `Resolved` | `dashboard` 已并回统一 `page-shell` 入口，并通过 `shellKind='dashboard'` 委托 shared renderer |
 | A4 | Style override density | `apps/retail-admin` | `Mandatory drift` | `Resolved` | `sidebar-overrides.css` 已移除局部 `!important`，并改为共享语义类挂点 |
-| A5 | Login / access bootstrap | `apps/retail-admin` + `apps/backend-mock` | `Reference-only` | `Aligned` | 当前单店主开发态登录继续使用 repo-owned `backend-mock` auth routes，并保持 `frontend access mode` |
+| A5 | Login / access bootstrap | `apps/retail-admin` + sibling backend + `apps/backend-mock` | `Reference-only` | `Aligned` | 正式 auth 主线已回到 sibling backend，`apps/backend-mock` 只保留为单仓开发与 E2E fallback，并继续保持 `frontend access mode` |
 | A6 | Role-scoped maintenance docs | `docs/*` | `Role-scoped gap` | `Resolved` | `CLI / Changeset / 升级 / 模板清理 / UI framework / 登录演进 / 外部模块` 已有维护者文档归宿 |
 | A7 | Shared / internal baseline | `packages/*` + `internal/*` | `Reference-only` | `Aligned` | 当前未发现新的长期硬性偏移，继续通过标准和升级流程观察 |
 | A8 | Repo-local E2E guardrail | repo root + `apps/retail-admin` | `Reference-only` | `Aligned` | `playwright.config.ts`、`tests/e2e/*`、最小 `data-testid` 与 workflow 均符合当前标准边界 |
@@ -82,7 +85,9 @@
 | A10 | Fixture placement | repo root + `apps/backend-mock` | `Mandatory drift` | `Resolved` | page payload fixture 已迁到 `apps/backend-mock/fixtures/pages`，app runtime `public/` 与 `tests/e2e` 都不再承担正式业务样本归宿 |
 | A11 | Repo-root debug assets | repo root | `Mandatory drift` | `Resolved` | `local-dashboard-*.png`、`reference-dashboard*.png` 与 `output/playwright` 产物已从版本管理中清理，并通过 `.gitignore` 和 `standards:check` 模式规则约束 |
 | A12 | Upstream clone cross-check | repo root + `packages/*` + `internal/*` | `Reference-only` | `Aligned` | 已对照官方仓 [vue-vben-admin](https://github.com/vbenjs/vue-vben-admin/tree/3528517fe) `main@3528517fe`；共享层骨架保持贴近 upstream，文件级差异已沉淀到 [Upstream 定制台账](./maintainers/upstream-customization-ledger.md) |
-| A13 | Backend-mock standard | `apps/backend-mock` + `apps/retail-admin` + `tests/e2e` + docs | `Reference-only` | `Aligned` | 前端先行 mock 的正式接口已统一收敛到官方式 `apps/backend-mock`、标准 envelope 与 fixture 归位规则 |
+| A13 | Backend-mock standard | `apps/backend-mock` + `apps/retail-admin` + `tests/e2e` + docs | `Reference-only` | `Aligned` | 前端先行 mock 的正式接口已统一收敛到官方式 `apps/backend-mock`；后续持续对齐点聚焦在 path/method/status/code/message 等 API 形式向 sibling backend 靠拢 |
+| A14 | Export sample placement | `apps/retail-admin` + `apps/backend-mock` | `Mandatory drift` | `Resolved` | `public/exports` 样本已迁到 `apps/backend-mock/fixtures/exports`，并由 `apps/backend-mock/routes/exports/[fileName].ts` 提供 repo-local fallback |
+| A15 | Empty route module cleanup | `apps/retail-admin` | `Mandatory drift` | `Resolved` | `router/routes/modules` 下的空 `demos.ts` / `vben.ts` 占位文件已移除，并由标准检查脚本阻止回流 |
 
 ## Findings
 
@@ -164,14 +169,14 @@
 
 当前状态：
 
-- router guard 继续沿用统一 access bootstrap，但不再依赖 backend auth 契约
-- 当前登录 provider 收敛在前端 `auth/user` API 层，而不是散落在 guard 或页面里
-- 当前业务 `/api/*` 不依赖 frontend bearer token
+- router guard 继续沿用统一 access bootstrap，并通过 sibling backend `/auth/*` 与 `/user/info` 完成正式登录主线
+- `apps/backend-mock` 只保留为单仓开发与 E2E fallback，不再是正式 auth source of truth
+- 当前业务 `/api/*` 仍不要求 frontend bearer token 才能消费 `manifest/pages/assistant`
 
 审计结论：
 
 - `Reference-only`
-- 当前为已文档化的集中 mock 登录方案，不再作为登记例外存在
+- 当前为已文档化的 backend-auth 主线 + frontend fallback 方案，不再作为登记例外存在
 
 ### A9. Dashboard runtime mock 主链移除
 
@@ -258,6 +263,40 @@
 审计结论：
 
 - `Aligned`
+
+### A14. Export sample placement
+
+当前位置：
+
+- [apps/backend-mock/fixtures/exports](../apps/backend-mock/fixtures/exports)
+- [apps/backend-mock/routes/exports/[fileName].ts](../apps/backend-mock/routes/exports/%5BfileName%5D.ts)
+- [apps/retail-admin/src/utils/black-tonny.ts](../apps/retail-admin/src/utils/black-tonny.ts)
+
+当前状态：
+
+- repo-owned 导出样本已不再放在 app runtime `public/`
+- 页面继续使用 `/exports/<file>` 形式，不需要改业务消费
+- repo-local fallback 改由 `apps/backend-mock` 路由提供
+
+审计结论：
+
+- `Resolved`
+
+### A15. Empty route module cleanup
+
+当前位置：
+
+- [apps/retail-admin/src/router/routes/modules](../apps/retail-admin/src/router/routes/modules)
+- [scripts/check-frontend-standards.mjs](../scripts/check-frontend-standards.mjs)
+
+当前状态：
+
+- 空的 `demos.ts` 与 `vben.ts` 占位模块已删除
+- 标准脚本会拦截空 route module 回流
+
+审计结论：
+
+- `Resolved`
 
 ### A12. Upstream clone 对照审计
 

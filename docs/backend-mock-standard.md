@@ -11,13 +11,19 @@
 - mock 的正式归宿必须是 `apps/backend-mock`
 - E2E 只消费这层 mock，不允许自己再长一套业务接口语义
 
+这里有一条需要固定下来的判断：
+
+- 按 `vben` 底座本身，`apps/backend-mock` 作为集成开发能力存在是正常的，甚至默认启用也不算偏
+- 真正需要持续收正的，不是“要不要有 backend-mock”，而是“它返回的 API 形式要不要跟 sibling backend 一致”
+
 ## 1. 适用范围
 
 适用于：
 
 - 正式业务 `/api/*` 接口的前置 mock 定义
-- 单店主开发态登录 mock
+- 单店主开发态登录 fallback
 - repo-local E2E 与本地联调样本
+- repo-local 导出文件 fallback（保持页面继续使用 `/exports/<file>`）
 
 不适用于：
 
@@ -73,7 +79,19 @@
 
 并继续配合正常 HTTP status 使用。
 
-### 3.3 request 字段名必须直接对齐最终契约
+### 3.3 backend-mock 的 API 形式必须向 sibling backend 靠拢
+
+对齐目标不仅是成功 envelope，还包括：
+
+- HTTP status
+- 业务码
+- message 文案
+- `Authorization` 失败时的错误形状
+- 用户信息字段形状
+
+如果 sibling backend 已经存在真实实现，`apps/backend-mock` 应优先贴近它，而不是继续沿用 frontend 自己的历史 mock 文案。
+
+### 3.4 request 字段名必须直接对齐最终契约
 
 - query 参数名必须直接用最终名字
 - request body 字段名必须直接用最终名字
@@ -85,7 +103,7 @@
 - `POST /api/assistant/chat` 继续用 `prompt`、`context`、`recentMessages`
 - `POST /api/auth/login` 继续用 `username`、`password`
 
-### 3.4 mock 归宿必须受控
+### 3.5 mock 归宿必须受控
 
 允许归宿：
 
@@ -95,6 +113,10 @@
   - route helper、fixture builder、envelope helper
 - `apps/backend-mock/fixtures/*`
   - repo-owned 业务样本
+- `apps/backend-mock/routes/exports/*`
+  - repo-local 导出文件 fallback route
+- `apps/retail-admin/vite.config.ts`
+  - dev 态把 `/exports/*` 继续代理到 `apps/backend-mock`
 - `tests/e2e/support/*`
   - 只负责 route interception、失败注入和测试驱动
 - `docs/*`
@@ -105,11 +127,12 @@
 - `apps/retail-admin/src/api/contracts/*`
 - `apps/retail-admin/src/api/core/mock-auth.ts`
 - `apps/retail-admin/public/*`
+- `apps/retail-admin/public/exports/*`
 - 页面组件内联 mock
 - runtime page-level `*.mock.ts`
 - `tests/e2e/fixtures/pages/*`
 
-### 3.5 frontend runtime 与 mock 必须分层
+### 3.6 frontend runtime 与 mock 必须分层
 
 - `apps/retail-admin/src/api/*` 只保留正式请求封装
 - `apps/backend-mock/*` 承担 mock route、fixture 和 mock helper
@@ -147,6 +170,8 @@
 - [manifest / pages / summary mock routes](../apps/backend-mock/api)
 - [assistant chat mock route](../apps/backend-mock/api/assistant/chat.post.ts)
 - [page payload fixtures](../apps/backend-mock/fixtures/pages)
+- [export fixtures](../apps/backend-mock/fixtures/exports)
+- [export fallback route](../apps/backend-mock/routes/exports/[fileName].ts)
 - [E2E route mock 入口](../tests/e2e/support/dashboard-api.ts)
 - [正式请求入口：manifest / pages / summary](../apps/retail-admin/src/api/black-tonny.ts)
 - [正式请求入口：assistant chat](../apps/retail-admin/src/api/assistant.ts)
@@ -169,18 +194,20 @@
 
 ## 7. 登录当前态
 
-当前单店主开发态登录也属于这套标准的一部分：
+当前单店主开发态登录 fallback 也属于这套标准的一部分：
 
 - frontend login form 继续走官方 `_core` auth 页面和 store 链路
 - `apps/retail-admin/src/api/core/auth.ts` 与 `user.ts` 继续走正式 `/auth/*`、`/user/info`
-- 本地 mock 由 `apps/backend-mock/api/auth/*` 和 `apps/backend-mock/api/user/info.ts` 提供
+- sibling backend 是正式 auth source of truth
+- 本地 mock 由 `apps/backend-mock/api/auth/*` 和 `apps/backend-mock/api/user/info.ts` 提供，但只作为 dev/test fallback
 - 不允许再回到 guard、页面或本地 API provider 内部硬编码 sample token / sample user
+- auth fallback 的 path、HTTP status、业务码、错误文案和用户信息字段，必须尽量贴近 sibling backend 的真实 auth 返回
 
 ## 8. 与 backend 的协作边界
 
 - frontend 可以先通过 `backend-mock` 定义契约
 - backend 文档一旦成型，backend 契约文档仍是长期规范源
-- `backend-mock` 只是前置契约实现和联调样本，不是长期替代 backend 的业务真源
+- `backend-mock` 只是前置契约实现、dev/test fallback 和联调样本，不是长期替代 backend 的业务真源
 
 当前跨仓边界见：
 
