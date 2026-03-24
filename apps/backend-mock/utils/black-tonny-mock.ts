@@ -1,43 +1,26 @@
-type DashboardSummaryPreset =
-  | 'today'
-  | 'yesterday'
-  | 'last7days'
-  | 'last30days'
-  | 'thisMonth'
-  | 'lastMonth'
-  | 'custom';
+import type { AiAssistantChatResponse } from '../../retail-admin/src/types/ai-assistant';
+import type {
+  BlackTonnyManifest,
+  BlackTonnyPayload,
+  DashboardSummaryMetric,
+  DashboardSummaryMetricKey,
+  DashboardSummaryPreset,
+  DashboardSummaryResponse,
+} from '../../retail-admin/src/types/black-tonny';
 
-type DashboardSummaryMetricKey =
-  | 'attachRate'
-  | 'avgOrderValue'
-  | 'lowStockSkuCount'
-  | 'orderCount'
-  | 'outOfSeasonStockQty'
-  | 'salesAmount'
-  | 'salesQuantity'
-  | 'sizeBreakStyleCount';
+import { existsSync, readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-interface DashboardSummaryMetric {
-  compareDirection: 'down' | 'flat' | 'up';
-  compareType: 'rate' | 'value';
-  compareValue: null | number;
-  subText: string;
-  unit: string;
-  value: number;
-}
-
-interface DashboardSummaryResponse {
-  dateRange: {
-    compareEndDate: string;
-    compareStartDate: string;
-    endDate: string;
-    preset: DashboardSummaryPreset;
-    startDate: string;
-  };
-  summary: Record<DashboardSummaryMetricKey, DashboardSummaryMetric>;
-}
+export const BLACK_TONNY_MOCK_API_PATHS = {
+  assistantChat: '/api/assistant/chat',
+  dashboardSummary: '/api/dashboard/summary',
+  manifest: '/api/manifest',
+  page: (pageKey: string) => `/api/pages/${pageKey}`,
+} as const;
 
 const FIXTURE_ANCHOR = new Date(2026, 2, 22);
+const pagesRoot = fileURLToPath(new URL('../fixtures/pages', import.meta.url));
 
 const SUMMARY_BY_PRESET: Record<
   Exclude<DashboardSummaryPreset, 'custom'>,
@@ -279,7 +262,7 @@ const SUMMARY_BY_PRESET: Record<
       '过季库存继续回落',
     ),
     salesAmount: createMetric(
-      4_560,
+      4560,
       'CNY',
       'up',
       22.4,
@@ -338,7 +321,7 @@ const SUMMARY_BY_PRESET: Record<
       '过季库存小幅下降',
     ),
     salesAmount: createMetric(
-      3_720,
+      3720,
       'CNY',
       'down',
       8.5,
@@ -375,6 +358,11 @@ function createMetric(
   };
 }
 
+function readJsonFile<T>(fileName: string): T {
+  const absolutePath = resolve(pagesRoot, fileName);
+  return JSON.parse(readFileSync(absolutePath, 'utf8')) as T;
+}
+
 function addDays(date: Date, days: number) {
   const next = new Date(date);
   next.setDate(next.getDate() + days);
@@ -401,23 +389,11 @@ function resolvePresetRange(
   const yesterday = formatDateToken(addDays(anchor, -1));
 
   switch (preset) {
-    case 'today': {
-      return [today, today];
-    }
-    case 'yesterday': {
-      return [yesterday, yesterday];
-    }
     case 'last7days': {
       return [formatDateToken(addDays(anchor, -6)), today];
     }
     case 'last30days': {
       return [formatDateToken(addDays(anchor, -29)), today];
-    }
-    case 'thisMonth': {
-      return [
-        formatDateToken(new Date(anchor.getFullYear(), anchor.getMonth(), 1)),
-        today,
-      ];
     }
     case 'lastMonth': {
       return [
@@ -426,6 +402,18 @@ function resolvePresetRange(
         ),
         formatDateToken(new Date(anchor.getFullYear(), anchor.getMonth(), 0)),
       ];
+    }
+    case 'thisMonth': {
+      return [
+        formatDateToken(new Date(anchor.getFullYear(), anchor.getMonth(), 1)),
+        today,
+      ];
+    }
+    case 'today': {
+      return [today, today];
+    }
+    case 'yesterday': {
+      return [yesterday, yesterday];
     }
   }
 }
@@ -462,6 +450,40 @@ function buildCompareRange(startDate: string, endDate: string) {
   return {
     compareEndDate: formatDateToken(compareEnd),
     compareStartDate: formatDateToken(compareStart),
+  };
+}
+
+export function createManifestFixture(): BlackTonnyManifest {
+  const manifest = readJsonFile<BlackTonnyManifest>('manifest.json');
+  const availablePages = Object.fromEntries(
+    Object.keys(manifest.available_pages ?? {}).map((pageKey) => [
+      pageKey,
+      BLACK_TONNY_MOCK_API_PATHS.page(pageKey),
+    ]),
+  );
+
+  return {
+    ...manifest,
+    available_pages: availablePages,
+  };
+}
+
+export function readPagePayload(pageKey: string): BlackTonnyPayload | null {
+  const absolutePath = resolve(pagesRoot, `${pageKey}.json`);
+  if (!existsSync(absolutePath)) {
+    return null;
+  }
+
+  return JSON.parse(readFileSync(absolutePath, 'utf8')) as BlackTonnyPayload;
+}
+
+export function createAssistantChatSuccessFixture(
+  prompt: string,
+): AiAssistantChatResponse {
+  return {
+    grounded: true,
+    provider: 'backend-mock',
+    reply: `backend-mock reply：${prompt}`,
   };
 }
 

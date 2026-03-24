@@ -125,7 +125,7 @@
 - 不单独维护一份和路由平行、长期脱节的菜单配置
 - 不绕开现有 router 模块目录，直接把大型业务路由散落到页面组件内部
 - 页面可见性、菜单结构、权限控制，优先沿用 router + `meta` + access store 模型
-- 当前登录与 access bootstrap 必须继续沿用现有 guard/access store 链路，且 mock provider 只能集中收敛在统一 auth/user API provider 层
+- 当前登录与 access bootstrap 必须继续沿用现有 guard/access store 链路，且开发态 mock 登录必须通过 `apps/backend-mock` 提供的正式 `/auth/*`、`/user/info` 路径进入
 
 禁止：
 
@@ -140,7 +140,8 @@
 当前仓库有两个数据层级：
 
 - 正式运行时数据路径：走 `/api/*`，统一使用 `requestClient`
-- repo-local sample / fixture 路径：只允许放在 `tests/e2e/fixtures/*` 或 `docs/*` 的样本区，不应再由前端页面直接读取
+- repo-local sample / fixture 路径：正式业务样本只允许放在 `apps/backend-mock/fixtures/*` 或 `docs/*` 的样本区，不应再由前端页面直接读取
+- 如果 backend 还没落地而 frontend 需要先推进，必须先按 [Backend Mock 标准](./backend-mock-standard.md) 在 `apps/backend-mock` 落 mock route 和 fixture，再推进页面消费
 
 必须遵守：
 
@@ -149,14 +150,17 @@
 - 页面运行时不要再直接 `fetch public/data/*`
 - 页面运行时不要再依赖 page-level 业务 `*.mock.ts` builder 组装正式内容
 - 正式 `/api/*` 默认遵循 `vben` 可直接消费的 `{ code, data, message }`
-- 当前登录 mock 只服务于前端路由与 owner 体验，不得再反向变成业务 `/api/*` 的真实鉴权依据
+- 当前开发态登录 mock 只服务于本地 owner 体验，并且必须由 `apps/backend-mock` 提供，不得再回到 guard、页面或 frontend-local auth provider
 - 接口契约变化要同步更新前后端边界文档
+- 前端先行 mock 的正式业务接口，必须把 mock route、fixture 与 helper 收敛到 `apps/backend-mock/*`
 
 禁止：
 
 - 为了省事跳过现有请求层，在业务代码里到处各写一套 `fetch`
 - 把应由后端定义的指标语义、口径换算和权限判断搬到前端自己算
 - 为单个接口加“临时裸响应特例”后长期不回收
+- 让 `tests/e2e` 里的 mock path、request 字段或 response shape 脱离正式 runtime 请求实现各写一版
+- 在 `apps/retail-admin/src/api/contracts/*` 或 `apps/retail-admin/src/api/core/mock-auth.ts` 再维护一套 mock 契约层
 
 ### 6. Page Architecture And Composition
 
@@ -251,14 +255,18 @@
 - `packages/*` 只承载跨应用共享能力
 - `internal/*` 只承载工程工具、构建链、lint、Tailwind、Vite 等基础设施
 - 共享组件或工具新增类名、slot、hook 时，要优先暴露稳定语义入口
+- 新第三方依赖默认仍要克制，但如果它明确属于底座、工程链、`apps/backend-mock` 或与 upstream `vben` 做法保持一致，可以引入
+- 引入底座级依赖时，要同时满足：用途清晰、优先服务基础设施或官方对齐、不是业务页私有依赖，并在文档或变更说明里写清理由
 - 前端仓库内的 Nitro 能力只作为 mock/dev 基础设施使用
 - 正式业务 API 继续以 sibling repo `black-tonny-backend` 为准
 - 如果为了联调保留 mock route、mock server 或 mock data，必须明确它们是测试或文档样本能力，不得替代正式接口契约，也不得继续挂在 app runtime `public/` 目录里
+- 当前前后端共同推进时，正式业务 mock 的默认工作流以 [Backend Mock 标准](./backend-mock-standard.md) 为准
 
 禁止：
 
 - 把单一业务页私有逻辑塞进共享包
 - 在 app 里复制共享能力，而不是回到底座层修正入口
+- 在业务页面或业务私有组件里为了一次性需求随手新增第三方依赖
 
 ### 11. Documentation And Contract Sync
 
@@ -296,7 +304,7 @@
 - 绕开现有启动脚本，临时发明一套长期开发流程
 - 在没有更新仓库版本入口和文档的情况下，各自使用漂移的 Node 版本
 - 在页面里各自维护一套语言切换或启动 loading 逻辑
-- 把 app 私有 E2E fixture 散落到 `apps/retail-admin/src`、shared package 或 `internal/*`
+- 把 app 私有 E2E fixture 散落到 `apps/retail-admin/src`、shared package、`internal/*` 或正式业务 `apps/backend-mock/fixtures/*` 之外的位置
 
 ### 13. Verification Matrix
 

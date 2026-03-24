@@ -24,6 +24,12 @@ export interface AiAssistantMessage {
   role: 'assistant' | 'user';
 }
 
+export interface AiAssistantChatRequest {
+  context?: AiAssistantContext | null;
+  prompt: string;
+  recentMessages?: Array<Pick<AiAssistantMessage, 'content' | 'role'>>;
+}
+
 export interface AiAssistantChatResponse {
   grounded: boolean;
   provider: string;

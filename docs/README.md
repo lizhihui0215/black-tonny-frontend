@@ -47,6 +47,10 @@ Generated state panels should still use one of the four status values above. If 
   - Current source of truth for frontend engineering rules, aligned to official `vue-vben-admin v5` docs and the local Black Tonny repo baseline, including env/config, routing/access, request layer, component reuse, theme, tooling, and verification rules
   - Current language: Chinese working doc
   - Status: `Source of truth`
+- [`backend-mock-standard.md`](./backend-mock-standard.md)
+  - Source of truth for official-style `apps/backend-mock` rules when frontend and backend advance formal `/api/*` interfaces together
+  - Current language: Chinese working doc
+  - Status: `Source of truth`
 - [`vben-official-baseline.md`](./vben-official-baseline.md)
   - Internal summary of the official `vue-vben-admin v5` baseline plus related ecosystem boundaries such as `shadcn-vue` and Nitro, used to support local standards and alignment reviews
   - Current language: Chinese

@@ -23,11 +23,11 @@ test('supports sidebar toggle, prompt click, and composer send on dashboard', as
 
   await prompts.getByRole('button', { name: '今天先看什么' }).click();
   await expect(messages).toContainText('今天先看什么');
-  await expect(messages).toContainText('E2E fixture reply：今天先看什么');
+  await expect(messages).toContainText('backend-mock reply：今天先看什么');
 
   await input.fill('帮我总结今天重点');
   await sidebar.getByTestId('ai-assistant-send').click();
 
   await expect(messages).toContainText('帮我总结今天重点');
-  await expect(messages).toContainText('E2E fixture reply：帮我总结今天重点');
+  await expect(messages).toContainText('backend-mock reply：帮我总结今天重点');
 });

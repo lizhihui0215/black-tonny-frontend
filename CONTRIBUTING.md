@@ -38,6 +38,8 @@ Use `pnpm check:mainline` as the default local no-drift baseline. It currently i
 
 Run `pnpm check:runtime` when your change affects bundling, route loading, build output, application composition, or runtime mainline behavior such as `dashboard`, mock login redirect, summary refresh, or the right-side AI assistant sidebar.
 
+If your change introduces or reshapes a formal frontend/backend business mock path, also update [docs/backend-mock-standard.md](./docs/backend-mock-standard.md) and the matching sibling backend boundary or API contract doc in the same change.
+
 `lefthook` also runs `pnpm check:mainline` on `pre-push`, so local pushes inherit the same baseline instead of relying on memory.
 
 ## Documentation Update Rules

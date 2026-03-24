@@ -2,6 +2,11 @@ import type { Page } from '@playwright/test';
 
 import { expect } from '@playwright/test';
 
+import {
+  MOCK_OWNER_PASSWORD,
+  MOCK_OWNER_USERNAME,
+} from '../../../apps/backend-mock/utils/auth-mock';
+
 export async function loginAsOwner(page: Page) {
   await page.goto('/dashboard');
   await expect(page).toHaveURL(/\/auth\/login/, {
@@ -14,13 +19,13 @@ export async function loginAsOwner(page: Page) {
   await page
     .locator('input[name="username"], input[placeholder="请输入用户名"]')
     .first()
-    .fill('owner');
+    .fill(MOCK_OWNER_USERNAME);
   await page
     .locator(
       'input[type="password"], input[name="password"], input[placeholder="密码"], input[placeholder="请输入密码"]',
     )
     .first()
-    .fill('black-tonny');
+    .fill(MOCK_OWNER_PASSWORD);
   await page.getByLabel('login').click();
 
   await expect(page).toHaveURL(/\/dashboard$/, {

@@ -174,7 +174,8 @@ Important implication:
 
 - main Black Tonny page payloads now go through the shared request layer
 - the frontend runtime no longer directly reads `public/data/*`
-- repo-local page payload fixtures now live under `tests/e2e/fixtures/pages`, while formal runtime page payloads come from backend APIs
+- repo-owned page payload fixtures now live under `apps/backend-mock/fixtures/pages`, while formal runtime page payloads come from backend APIs
+- when frontend must move before backend route delivery, mock routes should first be defined in `apps/backend-mock`, rather than ad hoc page-level mock builders or frontend-local contract directories
 
 This is already the formal runtime source-of-truth path.
 
@@ -200,13 +201,14 @@ That means the formal data path is aligned with the repo request standard again.
 
 ### Current auth path
 
-The current frontend auth path stays on the frontend side for the single-owner mode:
+The current frontend auth path keeps the official `vben` request/store chain, but local development auth is served by the repo-owned `apps/backend-mock` package:
 
-- login uses the documented centralized mock owner provider
+- login, access-code, and user-info requests all continue through formal `/api/auth/*` and `/api/user/info`
+- `apps/backend-mock/api/auth/*` and `apps/backend-mock/api/user/info.ts` provide the current single-owner mock implementation
 - router guard and access bootstrap still reuse the same `auth store + access store + user store` chain
-- business runtime APIs such as `manifest`, `pages`, `dashboard summary`, and `assistant chat` are not gated by a frontend bearer token
+- business runtime APIs such as `manifest`, `pages`, `dashboard summary`, and `assistant chat` remain formal `/api/*` routes, whether the provider is local `backend-mock` or the sibling backend
 
-The frontend still uses `frontend` access mode for route generation, but the current login state does not depend on a live backend auth contract.
+The frontend still uses `frontend` access mode for route generation, but the current development login state no longer depends on a frontend-local auth provider.
 
 ## Theme and UI Contract
 

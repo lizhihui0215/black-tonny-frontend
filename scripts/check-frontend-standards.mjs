@@ -4,9 +4,10 @@ import { execFileSync } from 'node:child_process';
 
 const repoRoot = path.resolve(import.meta.dirname, '..');
 const appSrc = path.join(repoRoot, 'apps/retail-admin/src');
+const backendMockDir = path.join(repoRoot, 'apps/backend-mock');
 const packagesDir = path.join(repoRoot, 'packages');
 const internalDir = path.join(repoRoot, 'internal');
-const fixtureDir = path.join(repoRoot, 'tests/e2e/fixtures/pages');
+const fixtureDir = path.join(repoRoot, 'apps/backend-mock/fixtures/pages');
 const nodeVersionPath = path.join(repoRoot, '.node-version');
 const nvmrcPath = path.join(repoRoot, '.nvmrc');
 
@@ -114,15 +115,31 @@ if (fs.existsSync(nodeVersionPath) && fs.existsSync(nvmrcPath)) {
 }
 
 if (fs.existsSync(path.join(repoRoot, 'apps/retail-admin/public/data'))) {
-  addFailure('`apps/retail-admin/public/data` must not exist; move page fixtures to `tests/e2e/fixtures/pages`.');
+  addFailure('`apps/retail-admin/public/data` must not exist; move page fixtures to `apps/backend-mock/fixtures/pages`.');
+}
+
+if (!fs.existsSync(backendMockDir)) {
+  addFailure('`apps/backend-mock` is required for official-style repo-local mock routes.');
+}
+
+if (fs.existsSync(path.join(repoRoot, 'tests/e2e/fixtures/pages'))) {
+  addFailure('`tests/e2e/fixtures/pages` must not exist; formal business fixtures belong in `apps/backend-mock/fixtures/pages`.');
+}
+
+if (fs.existsSync(path.join(appSrc, 'api/contracts'))) {
+  addFailure('`apps/retail-admin/src/api/contracts` must not exist; formal mock routes belong in `apps/backend-mock`.');
+}
+
+if (fs.existsSync(path.join(appSrc, 'api/core/mock-auth.ts'))) {
+  addFailure('`apps/retail-admin/src/api/core/mock-auth.ts` must not exist; auth mock must be served through `apps/backend-mock`.');
 }
 
 if (!fs.existsSync(fixtureDir)) {
-  addFailure('`tests/e2e/fixtures/pages` is required for repo-local dashboard fixtures.');
+  addFailure('`apps/backend-mock/fixtures/pages` is required for repo-local dashboard fixtures.');
 } else {
   const fixtureManifest = path.join(fixtureDir, 'manifest.json');
   if (!fs.existsSync(fixtureManifest)) {
-    addFailure('`tests/e2e/fixtures/pages/manifest.json` is missing.');
+    addFailure('`apps/backend-mock/fixtures/pages/manifest.json` is missing.');
   }
 }
 
@@ -185,24 +202,6 @@ const appMockFiles = walk(
 );
 for (const filePath of appMockFiles) {
   addFailure(`${toRepoPath(filePath)}: runtime app mock files are not allowed under apps/retail-admin/src.`);
-}
-
-const mockAuthImports = walk(
-  appSrc,
-  (filePath) => /\.(ts|tsx|vue)$/.test(filePath),
-).filter((filePath) => {
-  const source = read(filePath);
-  return source.includes("'./mock-auth'") || source.includes('"./mock-auth"');
-});
-const allowedMockAuthImporters = new Set([
-  'apps/retail-admin/src/api/core/auth.ts',
-  'apps/retail-admin/src/api/core/user.ts',
-]);
-for (const filePath of mockAuthImports) {
-  const repoPath = toRepoPath(filePath);
-  if (!allowedMockAuthImporters.has(repoPath)) {
-    addFailure(`${repoPath}: mock auth imports must stay inside auth/user API providers only.`);
-  }
 }
 
 const sharedFiles = [

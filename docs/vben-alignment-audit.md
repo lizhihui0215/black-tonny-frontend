@@ -59,7 +59,8 @@
 - repo-local `Playwright + tests/e2e` 护栏已经按标准落在仓库根目录，没有侵入 `apps/retail-admin/src`、`packages/*` 或 `internal/*`
 - 当前没有仍然打开的 `Registered exception`
 - `dashboard` 下半部分已经回到正式 payload-driven shared sections，不再依赖 runtime page-level mock builder
-- repo-local page payload fixture 已迁出 `apps/retail-admin/public/data`，统一收敛到 `tests/e2e/fixtures/pages`
+- repo-owned page payload fixture 已迁出 `apps/retail-admin/public/data`，统一收敛到 `apps/backend-mock/fixtures/pages`
+- 正式 `/api/*` 的 frontend 先行 mock 已收敛到 `backend-mock` 模式：mock route、fixture 与 helper 统一经 `apps/backend-mock/*` 暴露，E2E mock 直接复用同一套 helper 与正式路径
 - repo root 的调试截图素材已从版本管理中清理，并改由 `.gitignore` 约束
 - 仓库已新增 `pnpm standards:check`，用于自动拦截 app runtime mock 回流、fixture 归位漂移、共享层品牌泄漏和调试素材误入版本管理
 - 已与官方仓 [vue-vben-admin](https://github.com/vbenjs/vue-vben-admin/tree/3528517fe) 的 `main@3528517fe` 做骨架对照；`packages/*` 与 `internal/*` 源码骨架保持贴近 upstream，repo-owned additions 继续集中在 `docs/`、`tests/`、AI 入口与 `.forgejo/`
@@ -73,14 +74,15 @@
 | A2 | Layout structure coupling | `apps/retail-admin` + shared layout | `Mandatory drift` | `Resolved` | layout/sidebar 的高风险结构选择器与全局 DOM 查询已收敛 |
 | A3 | Page composition | `apps/retail-admin` | `Registered exception` | `Resolved` | `dashboard` 已并回统一 `page-shell` 入口，并通过 `shellKind='dashboard'` 委托 shared renderer |
 | A4 | Style override density | `apps/retail-admin` | `Mandatory drift` | `Resolved` | `sidebar-overrides.css` 已移除局部 `!important`，并改为共享语义类挂点 |
-| A5 | Login / access bootstrap | `apps/retail-admin` | `Reference-only` | `Aligned` | 当前单店主登录继续使用集中式 frontend mock owner provider，但它已被主标准文档化，不再作为例外保留 |
+| A5 | Login / access bootstrap | `apps/retail-admin` + `apps/backend-mock` | `Reference-only` | `Aligned` | 当前单店主开发态登录继续使用 repo-owned `backend-mock` auth routes，并保持 `frontend access mode` |
 | A6 | Role-scoped maintenance docs | `docs/*` | `Role-scoped gap` | `Resolved` | `CLI / Changeset / 升级 / 模板清理 / UI framework / 登录演进 / 外部模块` 已有维护者文档归宿 |
 | A7 | Shared / internal baseline | `packages/*` + `internal/*` | `Reference-only` | `Aligned` | 当前未发现新的长期硬性偏移，继续通过标准和升级流程观察 |
 | A8 | Repo-local E2E guardrail | repo root + `apps/retail-admin` | `Reference-only` | `Aligned` | `playwright.config.ts`、`tests/e2e/*`、最小 `data-testid` 与 workflow 均符合当前标准边界 |
 | A9 | Dashboard runtime mock removal | `apps/retail-admin` | `Mandatory drift` | `Resolved` | `dashboard` 下半部分已并回正式 payload-driven shared sections，runtime 不再依赖 `dashboard.mock.ts` |
-| A10 | Fixture placement | repo root + `apps/retail-admin` | `Mandatory drift` | `Resolved` | page payload fixture 已迁到 `tests/e2e/fixtures/pages`，app runtime `public/` 不再承担样本页面数据归宿 |
+| A10 | Fixture placement | repo root + `apps/backend-mock` | `Mandatory drift` | `Resolved` | page payload fixture 已迁到 `apps/backend-mock/fixtures/pages`，app runtime `public/` 与 `tests/e2e` 都不再承担正式业务样本归宿 |
 | A11 | Repo-root debug assets | repo root | `Mandatory drift` | `Resolved` | `local-dashboard-*.png`、`reference-dashboard*.png` 与 `output/playwright` 产物已从版本管理中清理，并通过 `.gitignore` 和 `standards:check` 模式规则约束 |
 | A12 | Upstream clone cross-check | repo root + `packages/*` + `internal/*` | `Reference-only` | `Aligned` | 已对照官方仓 [vue-vben-admin](https://github.com/vbenjs/vue-vben-admin/tree/3528517fe) `main@3528517fe`；共享层骨架保持贴近 upstream，文件级差异已沉淀到 [Upstream 定制台账](./maintainers/upstream-customization-ledger.md) |
+| A13 | Backend-mock standard | `apps/backend-mock` + `apps/retail-admin` + `tests/e2e` + docs | `Reference-only` | `Aligned` | 前端先行 mock 的正式接口已统一收敛到官方式 `apps/backend-mock`、标准 envelope 与 fixture 归位规则 |
 
 ## Findings
 
@@ -192,13 +194,13 @@
 
 当前位置：
 
-- [tests/e2e/fixtures/pages](../tests/e2e/fixtures/pages)
+- [apps/backend-mock/fixtures/pages](../apps/backend-mock/fixtures/pages)
 - [tests/e2e/support/dashboard-api.ts](../tests/e2e/support/dashboard-api.ts)
 
 当前状态：
 
 - E2E fixture 已不再从 `apps/retail-admin/public/data` 读取
-- 样本 payload 只保留在 repo-local 测试归宿
+- 样本 payload 只保留在 `apps/backend-mock/fixtures/pages`
 - app runtime `public/` 不再承担页面数据样本职责
 
 审计结论：
@@ -234,6 +236,24 @@
 - 已有文件级台账记录 `packages/*` 与 `internal/*` 的允许定制 diff
 - 仓库提供 `pnpm upstream:check`，用于对照官方仓 [vue-vben-admin](https://github.com/vbenjs/vue-vben-admin/tree/3528517fe) `main@3528517fe`
 - 当前共享层只允许 3 处稳定语义挂点定制继续存在，其余新增 diff 会被 guardrail 拦住
+
+审计结论：
+
+- `Aligned`
+
+### A13. Backend-mock standard
+
+当前位置：
+
+- [apps/backend-mock](../apps/backend-mock)
+- [tests/e2e/support/dashboard-api.ts](../tests/e2e/support/dashboard-api.ts)
+- [backend-mock-standard.md](./backend-mock-standard.md)
+
+当前状态：
+
+- 正式业务 mock 的 route、fixture 与 helper 已收敛到官方式 `apps/backend-mock`
+- E2E route interception mock 复用同一套正式 `/api/*` 路径和 helper
+- frontend 先行 mock 的边界、fixture 归宿和 backend 接棒方式已有正式文档说明
 
 审计结论：
 
@@ -297,7 +317,7 @@
 当前状态：
 
 - 当前未发现新的共享层或基础设施层 `Mandatory drift`
-- Nitro mock 仍处于基础设施层，且 `apps/retail-admin/vite.config.ts` 中默认 `nitroMock: false`
+- Nitro mock 仍处于基础设施层，且 `apps/retail-admin` 不再硬编码关闭 `nitroMock`
 - shared / internal 的后续风险主要不是“已经跑偏”，而是未来升级时可能重新引入边界不清的问题
 
 审计结论：

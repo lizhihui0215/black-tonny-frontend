@@ -25,7 +25,7 @@ export default defineConfig({
       VITE_APP_NAMESPACE: 'black-tonny-retail-admin',
       VITE_APP_TITLE: 'Black Tonny Retail Admin',
       VITE_ARCHIVER: 'false',
-      VITE_GLOB_API_URL: '',
+      VITE_GLOB_API_URL: '/api',
       VITE_BASE: '/',
       VITE_E2E_BYPASS_CAPTCHA: 'true',
       VITE_ROUTER_HISTORY: 'history',

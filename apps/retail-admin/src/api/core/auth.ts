@@ -1,9 +1,4 @@
-import {
-  getMockAccessCodes,
-  getMockLoginResult,
-  getMockLogoutResult,
-  getMockRefreshTokenResult,
-} from './mock-auth';
+import { baseRequestClient, requestClient } from '#/api/request';
 
 export namespace AuthApi {
   /** 登录接口参数 */
@@ -16,38 +11,36 @@ export namespace AuthApi {
   export interface LoginResult {
     accessToken: string;
   }
-
-  export interface RefreshTokenResult {
-    data: string;
-    status: number;
-  }
 }
 
 /**
  * 登录
  */
 export async function loginApi(data: AuthApi.LoginParams) {
-  void data;
-  return getMockLoginResult();
+  return requestClient.post<AuthApi.LoginResult>('/auth/login', data);
 }
 
 /**
  * 刷新accessToken
  */
 export async function refreshTokenApi() {
-  return getMockRefreshTokenResult();
+  return baseRequestClient.post<string>('/auth/refresh', undefined, {
+    withCredentials: true,
+  });
 }
 
 /**
  * 退出登录
  */
 export async function logoutApi() {
-  return getMockLogoutResult();
+  return baseRequestClient.post('/auth/logout', undefined, {
+    withCredentials: true,
+  });
 }
 
 /**
  * 获取用户权限码
  */
 export async function getAccessCodesApi() {
-  return getMockAccessCodes();
+  return requestClient.get<string[]>('/auth/codes');
 }

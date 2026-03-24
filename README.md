@@ -16,7 +16,7 @@ This repo owns the page layer, route structure, shared panels, theme preferences
 - Main page payloads now load through the backend `GET /api/manifest` and `GET /api/pages/{page_key}` APIs
 - Dashboard summary uses the backend endpoint `GET /api/dashboard/summary`
 - A layout-level right-side AI assistant sidebar is available across the business pages and now uses the backend `POST /api/assistant/chat` path, with frontend fallback only for local unavailable-backend scenarios
-- Single-owner frontend login currently uses the documented centralized frontend mock owner flow, while `frontend access mode` remains the current access model
+- Single-owner development login currently runs through the repo-owned `apps/backend-mock` auth routes, while `frontend access mode` remains the current access model
 
 ## Quick Start
 
@@ -52,6 +52,7 @@ pnpm test:e2e:dashboard
 - [ARCHITECTURE.md](./ARCHITECTURE.md): runtime flow, page composition model, and frontend ownership boundaries
 - [docs/README.md](./docs/README.md): topic-level documentation index
 - [docs/document-map.md](./docs/document-map.md): cross-repository document map for product, implementation, and tooling navigation
+- [docs/backend-mock-standard.md](./docs/backend-mock-standard.md): source of truth for repo-owned `backend-mock` rules when frontend and backend advance formal `/api/*` work together
 - [docs/product/README.md](./docs/product/README.md): product overview and solution-facing docs for customer communication
 - [docs/tooling/README.md](./docs/tooling/README.md): repo-local tooling docs for temp skills and AI-assisted workflows
 - [CONTRIBUTING.md](./CONTRIBUTING.md): contribution and documentation update rules
@@ -96,6 +97,11 @@ Public-facing standard docs include:
 
 ```text
 apps/retail-admin/src/
+apps/backend-mock/
+  api/
+  fixtures/
+  utils/
+apps/retail-admin/src/
   adapter/
   api/
   components/
@@ -113,7 +119,8 @@ packages/
 ## Data Notes
 
 - The current page shell is config-driven through `PageSpec + page-shell + shared components`, and `dashboard` now also re-enters through the same route-level shell
-- Repo-local page payload fixtures now live under `tests/e2e/fixtures/pages`, while the formal runtime page path goes through backend `manifest/pages` APIs
+- Repo-owned page payload fixtures now live under `apps/backend-mock/fixtures/pages`, while the formal runtime page path still goes through backend `manifest/pages` APIs
+- Local development auth mock also runs through `apps/backend-mock`, instead of a frontend-local auth provider
 - The dashboard summary and right-side assistant chat paths both expect the backend service for the full current experience
 
 ## Related Repositories

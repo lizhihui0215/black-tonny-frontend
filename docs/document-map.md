@@ -79,6 +79,13 @@
 5. 如果在判断当前仓库是否已经跑偏，再看：
    - [Vben 对齐审计](./vben-alignment-audit.md)
 
+### 2.6 想让 frontend 先用 mock 定接口，再让 backend 跟进
+
+1. [前端工程标准](./frontend-engineering-standard.md)
+2. [Backend Mock 标准](./backend-mock-standard.md)
+3. [Sibling backend 前后端边界文档](https://github.com/lizhihui0215/black-tonny-backend/blob/main/docs/frontend-backend-boundary.md)
+4. [Sibling backend API 响应标准](https://github.com/lizhihui0215/black-tonny-backend/blob/main/docs/api-response-standard.md)
+
 ## 3. Frontend 文档树
 
 ```text
@@ -89,6 +96,7 @@ black-tonny-frontend/
    ├─ README.md                     # frontend docs 总入口
    ├─ document-map.md               # 跨仓库文档总图
    ├─ frontend-engineering-standard.md # 前端工程规范
+   ├─ backend-mock-standard.md      # 前后端共同推进时的 backend-mock 标准
    ├─ official-doc-coverage-board.md # 官方文档覆盖清单
    ├─ vben-alignment-audit.md       # 全仓对齐审计与例外登记
    ├─ maintainers/                  # 维护者手册
