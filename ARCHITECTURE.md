@@ -201,14 +201,15 @@ That means the formal data path is aligned with the repo request standard again.
 
 ### Current auth path
 
-The current frontend auth path keeps the official `vben` request/store chain, but local development auth is served by the repo-owned `apps/backend-mock` package:
+The current frontend auth path keeps the official `vben` request/store chain, and the formal auth source of truth is the sibling backend `/api/auth/*` and `/api/user/info` contract:
 
 - login, access-code, and user-info requests all continue through formal `/api/auth/*` and `/api/user/info`
-- `apps/backend-mock/api/auth/*` and `apps/backend-mock/api/user/info.ts` provide the current single-owner mock implementation
+- the sibling backend now owns the formal auth contract and canonical runtime behavior
+- `apps/backend-mock/api/auth/*` and `apps/backend-mock/api/user/info.ts` remain only as the single-owner local dev/test fallback
 - router guard and access bootstrap still reuse the same `auth store + access store + user store` chain
 - business runtime APIs such as `manifest`, `pages`, `dashboard summary`, and `assistant chat` remain formal `/api/*` routes, whether the provider is local `backend-mock` or the sibling backend
 
-The frontend still uses `frontend` access mode for route generation, but the current development login state no longer depends on a frontend-local auth provider.
+The frontend still uses `frontend` access mode for route generation, and local single-repo development still remains runnable through the `backend-mock` fallback without changing the formal auth source of truth.
 
 ## Theme and UI Contract
 

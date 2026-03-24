@@ -16,7 +16,7 @@ This repo owns the page layer, route structure, shared panels, theme preferences
 - Main page payloads now load through the backend `GET /api/manifest` and `GET /api/pages/{page_key}` APIs
 - Dashboard summary uses the backend endpoint `GET /api/dashboard/summary`
 - A layout-level right-side AI assistant sidebar is available across the business pages and now uses the backend `POST /api/assistant/chat` path, with frontend fallback only for local unavailable-backend scenarios
-- Single-owner development login currently runs through the repo-owned `apps/backend-mock` auth routes, while `frontend access mode` remains the current access model
+- Formal auth contract now follows the sibling backend `/api/auth/*` and `/api/user/info` routes, while repo-owned `apps/backend-mock` remains the dev/test fallback for single-repo work
 
 ## Quick Start
 
@@ -120,7 +120,7 @@ packages/
 
 - The current page shell is config-driven through `PageSpec + page-shell + shared components`, and `dashboard` now also re-enters through the same route-level shell
 - Repo-owned page payload fixtures now live under `apps/backend-mock/fixtures/pages`, while the formal runtime page path still goes through backend `manifest/pages` APIs
-- Local development auth mock also runs through `apps/backend-mock`, instead of a frontend-local auth provider
+- Formal auth source of truth is now the sibling backend auth routes; `apps/backend-mock` only remains as the local dev/test fallback, instead of becoming a second frontend-local auth provider
 - The dashboard summary and right-side assistant chat paths both expect the backend service for the full current experience
 
 ## Related Repositories

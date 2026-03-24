@@ -8,7 +8,7 @@ import {
   createMockLogoutResult,
   createMockRefreshTokenResult,
   getMockAccessCodes,
-  verifyMockAccessToken,
+  requireMockFrontendUser,
 } from '../../../apps/backend-mock/utils/auth-mock';
 import {
   BLACK_TONNY_MOCK_API_PATHS,
@@ -61,8 +61,8 @@ export async function installDashboardApiMocks(
       if (!loginResult) {
         await fulfillJson(
           route,
-          createApiErrorEnvelope(403, 'Username or password is incorrect.'),
-          403,
+          createApiErrorEnvelope(40120, 'Invalid username or password.'),
+          401,
         );
         return;
       }
@@ -75,14 +75,14 @@ export async function installDashboardApiMocks(
       request.method() === 'GET' &&
       normalizedPathname.endsWith(AUTH_MOCK_API_PATHS.accessCodes)
     ) {
-      const userInfo = verifyMockAccessToken(
+      const authResult = requireMockFrontendUser(
         request.headers().authorization ?? null,
       );
 
-      if (!userInfo) {
+      if (!authResult.ok) {
         await fulfillJson(
           route,
-          createApiErrorEnvelope(401, 'Unauthorized'),
+          createApiErrorEnvelope(authResult.code, authResult.message),
           401,
         );
         return;
@@ -96,20 +96,20 @@ export async function installDashboardApiMocks(
       request.method() === 'GET' &&
       normalizedPathname.endsWith(AUTH_MOCK_API_PATHS.userInfo)
     ) {
-      const userInfo = verifyMockAccessToken(
+      const authResult = requireMockFrontendUser(
         request.headers().authorization ?? null,
       );
 
-      if (!userInfo) {
+      if (!authResult.ok) {
         await fulfillJson(
           route,
-          createApiErrorEnvelope(401, 'Unauthorized'),
+          createApiErrorEnvelope(authResult.code, authResult.message),
           401,
         );
         return;
       }
 
-      await fulfillJson(route, createApiSuccessEnvelope(userInfo));
+      await fulfillJson(route, createApiSuccessEnvelope(authResult.userInfo));
       return;
     }
 

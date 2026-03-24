@@ -2,7 +2,7 @@ import { defineEventHandler, readBody } from 'h3';
 import { createMockLoginResult } from '~/utils/auth-mock';
 import {
   badRequestResponse,
-  forbiddenResponse,
+  unAuthorizedResponse,
   useResponseSuccess,
 } from '~/utils/response';
 
@@ -17,7 +17,9 @@ export default defineEventHandler(async (event) => {
 
   const loginResult = createMockLoginResult({ password, username });
   if (!loginResult) {
-    return forbiddenResponse(event, 'Username or password is incorrect.');
+    return unAuthorizedResponse(event, 'Invalid username or password.', {
+      code: 40120,
+    });
   }
 
   return useResponseSuccess(loginResult);
